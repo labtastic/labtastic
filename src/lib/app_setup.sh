@@ -1,6 +1,8 @@
 setup_app() {
   app_name=$1
 
+  source .env
+
   echo "# $1 Vars" >> .env
   cat "apps/$1/.env" >> .env
   echo "" >> .env
