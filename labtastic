@@ -242,7 +242,8 @@ setup_app() {
   mkdir -p "$APP_DATA/$1"
 
   if [ -d "apps/$1/data" ]; then
-    cp --recursive --update apps/${1}/data/\* ${APP_DATA}/${1}
+    echo "$(pwd)"
+    cp --recursive apps/${1}/data/\* ${APP_DATA}/${1}
     find "$APP_DATA/$1" -name ".gitkeep" -type f -delete
   fi
 }
@@ -390,8 +391,6 @@ yaml_load() {
 # :command.function
 labtastic_init_command() {
   # src/init_command.sh
-  inspect_args
-
   if [ -f ".labtastic-init-done" ]; then
     error "labtastic init already done. exiting..."
     exit 1
@@ -457,13 +456,7 @@ labtastic_init_command() {
 # :command.function
 labtastic_install_command() {
   # src/install_command.sh
-  inspect_args
-
   setup_app "${args[appname]}"
-
-  DEFAULT_COMPOSE_FILE="apps/base/docker-compose.yml"
-
-  export COMPOSE_PATH_SEPARATOR=":"
 }
 
 # :command.function

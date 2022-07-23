@@ -1,5 +1,3 @@
-inspect_args
-
 if [ -f ".labtastic-init-done" ]; then
   error "labtastic init already done. exiting..."
   exit 1
