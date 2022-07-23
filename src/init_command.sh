@@ -28,13 +28,13 @@ if [ ! -d "${args[appdata]}" ]; then
   sudo chown -R "$(id -u):$(id -g)" "${args[appdata]}"
 else
   info "app data directory already exists"
-  sudo chown -R "$(id -u):$(id -g)" "${args[appdata]}"
+  sudo chown "$(id -u):$(id -g)" "${args[appdata]}"
 fi
 
 info "creating initial .env config"
 
 echo "### ENABLED APPS ###" > .env
-echo "ENABLED_APPS=(\"base\")" >> .env
+echo "ENABLED_APPS=()" >> .env
 echo "### Global ENV Vars ###" >> .env
 echo "# dns base domain" >> .env
 echo "DOMAIN=\"changeme\"" >> .env
@@ -44,14 +44,6 @@ echo "# Use watchtower to auto update containers" >> .env
 echo "AUTO_UPDATE=\"true\"" >> .env
 echo "" >> .env
 echo "### Application Specific Vars ###" >> .env
-
-info "adding base vars to .env"
-
-setup_app "base"
-
-docker_compose_setup "base"
-
-docker_compose_up
 
 touch .labtastic-init-done
 

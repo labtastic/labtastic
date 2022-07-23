@@ -31,33 +31,31 @@ generate_compose_profiles() {
 }
 
 docker_compose_setup() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES="$1-setup"
-
-  docker compose up -d
+  docker compose --project-name labtastic --profile "$1-setup" -f apps/${1}/docker-compose.yml up -d
 }
 
 docker_compose_up() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES=$(generate_compose_profiles)
-
-  docker compose up -d 
+  docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml up -d
 }
 
 docker_compose_stop_all() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES=$(generate_compose_profiles)
-  
-  docker compose stop 
+  source .env
+  for app in ${ENABLED_APPS[@]}; do
+    docker compose --project-name labtastic --profile "$app" -f apps/${app}/docker-compose.yml stop
+  done
 }
 
 docker_compose_stop() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES="$1,$1-setup"
+  docker compose -project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml stop
+}
 
-  docker compose stop
+docker_compose_start_all() {
+  source .env
+  for app in ${ENABLED_APPS[@]}; do
+    docker compose --project-name labtastic --profile "$app" -f apps/${app}/docker-compose.yml start
+  done
+}
+
+docker_compose_start() {
+  docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml start
 }

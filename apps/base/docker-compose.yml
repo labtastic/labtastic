@@ -3,6 +3,7 @@ version: '3'
 services:
   ingress:
     image: traefik
+    restart: always
     environment:
       LEGO_CA_CERTIFICATES: "/root_ca.crt"
     volumes:
@@ -22,6 +23,7 @@ services:
 
   labtastic-ca:
     image: smallstep/step-ca
+    restart: always
     healthcheck:
       test: ["curl", "https://localhost:9000/health"]
       interval: 10s

@@ -235,7 +235,13 @@ setup_app() {
 
   source .env
 
+  if printf '%s\0' "${ENABLED_APPS[@]}" | grep -Fxqz "$app_name"; then
+    error "app already installed"
+    exit 1
+  fi
+
   echo "# $1 Vars" >> .env
+  echo "ENABLED_APPS+=(\"$1\")"
   cat "apps/$1/.env" >> .env
   echo "" >> .env
 
@@ -313,37 +319,33 @@ generate_compose_profiles() {
 }
 
 docker_compose_setup() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES="$1-setup"
-
-  docker compose up -d
+  docker compose --project-name labtastic --profile "$1-setup" -f apps/${1}/docker-compose.yml up -d
 }
 
 docker_compose_up() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES=$(generate_compose_profiles)
-
-  docker compose up -d
-
+  docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml up -d
 }
 
 docker_compose_stop_all() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES=$(generate_compose_profiles)
-
-  docker compose stop
-
+  source .env
+  for app in ${ENABLED_APPS[@]}; do
+    docker compose --project-name labtastic --profile "$app" -f apps/${app}/docker-compose.yml stop
+  done
 }
 
 docker_compose_stop() {
-  export COMPOSE_PATH_SEPARATOR=":"
-  export COMPOSE_FILE=$(generate_compose_files_list)
-  export COMPOSE_PROFILES="$1,$1-setup"
+  docker compose -project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml stop
+}
 
-  docker compose stop
+docker_compose_start_all() {
+  source .env
+  for app in ${ENABLED_APPS[@]}; do
+    docker compose --project-name labtastic --profile "$app" -f apps/${app}/docker-compose.yml start
+  done
+}
+
+docker_compose_start() {
+  docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml start
 }
 
 # src/lib/filters.sh
@@ -420,13 +422,13 @@ labtastic_init_command() {
     sudo chown -R "$(id -u):$(id -g)" "${args[appdata]}"
   else
     info "app data directory already exists"
-    sudo chown -R "$(id -u):$(id -g)" "${args[appdata]}"
+    sudo chown "$(id -u):$(id -g)" "${args[appdata]}"
   fi
 
   info "creating initial .env config"
 
   echo "### ENABLED APPS ###" > .env
-  echo "ENABLED_APPS=(\"base\")" >> .env
+  echo "ENABLED_APPS=()" >> .env
   echo "### Global ENV Vars ###" >> .env
   echo "# dns base domain" >> .env
   echo "DOMAIN=\"changeme\"" >> .env
@@ -436,14 +438,6 @@ labtastic_init_command() {
   echo "AUTO_UPDATE=\"true\"" >> .env
   echo "" >> .env
   echo "### Application Specific Vars ###" >> .env
-
-  info "adding base vars to .env"
-
-  setup_app "base"
-
-  docker_compose_setup "base"
-
-  docker_compose_up
 
   touch .labtastic-init-done
 
@@ -458,6 +452,10 @@ labtastic_init_command() {
 labtastic_install_command() {
   # src/install_command.sh
   setup_app "${args[appname]}"
+
+  docker_compose_setup "${args[appname]}"
+
+  docker_compose_up "${args[appname]}"
 }
 
 # :command.function
