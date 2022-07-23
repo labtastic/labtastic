@@ -406,15 +406,18 @@ labtastic_init_command() {
   if ! command -v docker &> /dev/null
   then
     info "Installing docker..."
-    curl -fsSL https://get.docker.com -o get-docker.sh | bash
+    curl -fsSL https://get.docker.com | bash
   else
     info "docker already installed"
   fi
 
   if [ ! -d "${args[appdata]}" ]; then
     info "creating app data directory: ${args[appdata]}"
+    sudo mkdir -p "${args[appdata]}"
+    sudo chown -R "$(id -u):$(id -g)" "${args[appdata]}"
   else
     info "app data directory already exists"
+    sudo chown -R "$(id -u):$(id -g)" "${args[appdata]}"
   fi
 
   info "creating initial .env config"
