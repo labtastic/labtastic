@@ -51,6 +51,7 @@ services:
       - "traefik.http.routers.base-ca.entrypoints=web, websecure"
       - "traefik.http.routers.base-ca.tls=true"
       - "traefik.http.routers.base-ca.tls.certresolver=labtastic"
+      - "traefik.http.services.base-ca.loadbalancer.server.port=9000"
   
   watchtower:
     image: containrrr/watchtower
@@ -88,10 +89,11 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "traefik.enable=true"
-      - "traefik.http.routers.base-ca.rule=Host(`dns.${DOMAIN}`)"
-      - "traefik.http.routers.base-ca.entrypoints=web, websecure"
-      - "traefik.http.routers.base-ca.tls=true"
-      - "traefik.http.routers.base-ca.tls.certresolver=labtastic"
+      - "traefik.http.routers.base-dns.rule=Host(`dns.${DOMAIN}`)"
+      - "traefik.http.routers.base-dns.entrypoints=web, websecure"
+      - "traefik.http.routers.base-dns.tls=true"
+      - "traefik.http.routers.base-dns.tls.certresolver=labtastic"
+      - "traefik.http.services.base-dns.loadbalancer.server.port=9000"
     ports:
       - "53:53/tcp"
       - "53:53/udp"
