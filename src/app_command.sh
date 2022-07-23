@@ -1,7 +1,3 @@
-if [[ ! "${args[--stop]}" == "1" || ! "${args[--start]}" == "1" ]]; then
-  error "must specify an action (--start/--stop)"
-fi
-
 if [ "${args[--stop]}" == "1" ]; then
   if [ "${args[appname]}" == "all" ]; then
     docker_compose_stop_all
