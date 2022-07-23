@@ -1,6 +1,5 @@
-setup_app "${args[appname]}"
-
 if [ ! -f "apps/${args[appname]}/.setup-done" ]; then
+  setup_app "${args[appname]}"
   touch "apps/${args[appname]}/.setup-done"
   info "please view/update values for ${args[appname]} app in .env then rerun this command again"
   exit 0
