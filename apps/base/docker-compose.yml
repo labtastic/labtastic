@@ -47,11 +47,11 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "traefik.enable=true"
-      - "traefik.http.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
-      - "traefik.http.routers.base-ca.entrypoints=web, websecure"
-      - "traefik.http.routers.base-ca.tls=true"
-      - "traefik.http.routers.base-ca.tls.passthrough=true"
-      - "traefik.http.services.base-ca.loadbalancer.server.port=9000"
+      - "traefik.tcp.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
+      - "traefik.tcp.routers.base-ca.entrypoints=web, websecure"
+      - "traefik.tcp.routers.base-ca.tls=true"
+      - "traefik.tcp.routers.base-ca.tls.passthrough=true"
+      - "traefik.tcp.services.base-ca.loadbalancer.server.port=9000"
   
   watchtower:
     image: containrrr/watchtower
