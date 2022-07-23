@@ -49,6 +49,6 @@ touch .labtastic-init-done
 
 info "Labtastic is now intialized!"
 
-echo "${yellow WARNING: Please review and update .env before running './labtastic install'}"
+echo "$(yellow WARNING: Please review and update .env before running './labtastic install')"
 
 exit 0
