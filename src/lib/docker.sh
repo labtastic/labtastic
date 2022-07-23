@@ -6,6 +6,10 @@ docker_compose_up() {
   env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml up -d
 }
 
+docker_compose_down() {
+  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml down
+}
+
 docker_compose_stop_all() {
   source .env
   for app in ${ENABLED_APPS[@]}; do
@@ -14,7 +18,7 @@ docker_compose_stop_all() {
 }
 
 docker_compose_stop() {
-  env $(cat .env | grep -v "^#" | xargs ) docker compose -project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml stop
+  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml stop
 }
 
 docker_compose_start_all() {

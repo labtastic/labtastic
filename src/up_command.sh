@@ -1,0 +1,1 @@
+docker_compose_up "${args[appname]}"

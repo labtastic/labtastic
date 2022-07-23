@@ -45,6 +45,8 @@ commands:
   args:
     - name: appname
       required: true
+  
+  flags: []
 
   examples:
   - labtastic start app-name
@@ -57,9 +59,39 @@ commands:
   args:
     - name: appname
       required: true
+  
+  flags: []
       
   examples:
   - labtastic start app-name
+
+  environment_variables: []
+
+- name: up
+  help: start an app
+
+  args:
+    - name: appname
+      required: true
+  
+  flags: []
+      
+  examples:
+  - labtastic up app-name
+
+  environment_variables: []
+
+- name: down
+  help: stop an app
+
+  args:
+    - name: appname
+      required: true
+  
+  flags: []
+      
+  examples:
+  - labtastic down app-name
 
   environment_variables: []
 

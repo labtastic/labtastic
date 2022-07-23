@@ -38,6 +38,8 @@ labtastic_usage() {
   echo "  install   install and prepare an app"
   echo "  start     start an app"
   echo "  stop      stop an app"
+  echo "  up        start an app"
+  echo "  down      stop an app"
   echo "  update    update labtastic"
   echo
 
@@ -230,6 +232,88 @@ labtastic_stop_usage() {
 }
 
 # :command.usage
+labtastic_up_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "labtastic up - start an app\n"
+    echo
+
+  else
+    printf "labtastic up - start an app\n"
+    echo
+
+  fi
+
+  printf "Usage:\n"
+  printf "  labtastic up APPNAME\n"
+  printf "  labtastic up --help | -h\n"
+  echo
+
+  if [[ -n $long_usage ]]; then
+    printf "Options:\n"
+    # :command.usage_fixed_flags
+    echo "  --help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "Arguments:\n"
+
+    # :argument.usage
+    echo "  APPNAME"
+    printf "\n"
+    echo
+
+    # :command.usage_examples
+    printf "Examples:\n"
+
+    printf "  labtastic up app-name\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+labtastic_down_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "labtastic down - stop an app\n"
+    echo
+
+  else
+    printf "labtastic down - stop an app\n"
+    echo
+
+  fi
+
+  printf "Usage:\n"
+  printf "  labtastic down APPNAME\n"
+  printf "  labtastic down --help | -h\n"
+  echo
+
+  if [[ -n $long_usage ]]; then
+    printf "Options:\n"
+    # :command.usage_fixed_flags
+    echo "  --help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "Arguments:\n"
+
+    # :argument.usage
+    echo "  APPNAME"
+    printf "\n"
+    echo
+
+    # :command.usage_examples
+    printf "Examples:\n"
+
+    printf "  labtastic down app-name\n"
+    echo
+
+  fi
+}
+
+# :command.usage
 labtastic_update_usage() {
   if [[ -n $long_usage ]]; then
     printf "labtastic update - update labtastic\n"
@@ -372,6 +456,10 @@ docker_compose_up() {
   env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml up -d
 }
 
+docker_compose_down() {
+  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml down
+}
+
 docker_compose_stop_all() {
   source .env
   for app in ${ENABLED_APPS[@]}; do
@@ -380,7 +468,7 @@ docker_compose_stop_all() {
 }
 
 docker_compose_stop() {
-  env $(cat .env | grep -v "^#" | xargs ) docker compose -project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml stop
+  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" -f apps/${1}/docker-compose.yml stop
 }
 
 docker_compose_start_all() {
@@ -523,6 +611,18 @@ labtastic_stop_command() {
 }
 
 # :command.function
+labtastic_up_command() {
+  # src/up_command.sh
+  docker_compose_up "${args[appname]}"
+}
+
+# :command.function
+labtastic_down_command() {
+  # src/down_command.sh
+  docker_compose_down "${args[appname]}"
+}
+
+# :command.function
 labtastic_update_command() {
   # src/update_command.sh
   info "updating labtastic and apps"
@@ -583,6 +683,20 @@ parse_requirements() {
     action="stop"
     shift
     labtastic_stop_parse_requirements "$@"
+    shift $#
+    ;;
+
+  up )
+    action="up"
+    shift
+    labtastic_up_parse_requirements "$@"
+    shift $#
+    ;;
+
+  down )
+    action="down"
+    shift
+    labtastic_down_parse_requirements "$@"
     shift $#
     ;;
 
@@ -833,6 +947,110 @@ labtastic_stop_parse_requirements() {
 }
 
 # :command.parse_requirements
+labtastic_up_parse_requirements() {
+  # :command.fixed_flags_filter
+  case "${1:-}" in
+  --help | -h )
+    long_usage=yes
+    labtastic_up_usage
+    exit
+    ;;
+
+  esac
+  # :command.environment_variables_filter
+  # :command.dependencies_filter
+  # :command.command_filter
+  action="up"
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+    -?* )
+      printf "invalid option: %s\n" "$key"
+      exit 1
+      ;;
+
+    * )
+      # :command.parse_requirements_case
+      # :command.parse_requirements_case_simple
+      if [[ -z ${args[appname]+x} ]]; then
+        # :argument.validations
+        args[appname]=$1
+        shift
+      else
+        printf "invalid argument: %s\n" "$key"
+        exit 1
+      fi
+      ;;
+
+    esac
+  done
+  # :command.required_args_filter
+  if [[ -z ${args[appname]+x} ]]; then
+    printf "missing required argument: APPNAME\nusage: labtastic up APPNAME\n"
+    exit 1
+  fi
+  # :command.required_flags_filter
+  # :command.catch_all_filter
+  # :command.default_assignments
+  # :command.whitelist_filter
+  # :command.user_filter
+}
+
+# :command.parse_requirements
+labtastic_down_parse_requirements() {
+  # :command.fixed_flags_filter
+  case "${1:-}" in
+  --help | -h )
+    long_usage=yes
+    labtastic_down_usage
+    exit
+    ;;
+
+  esac
+  # :command.environment_variables_filter
+  # :command.dependencies_filter
+  # :command.command_filter
+  action="down"
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+    -?* )
+      printf "invalid option: %s\n" "$key"
+      exit 1
+      ;;
+
+    * )
+      # :command.parse_requirements_case
+      # :command.parse_requirements_case_simple
+      if [[ -z ${args[appname]+x} ]]; then
+        # :argument.validations
+        args[appname]=$1
+        shift
+      else
+        printf "invalid argument: %s\n" "$key"
+        exit 1
+      fi
+      ;;
+
+    esac
+  done
+  # :command.required_args_filter
+  if [[ -z ${args[appname]+x} ]]; then
+    printf "missing required argument: APPNAME\nusage: labtastic down APPNAME\n"
+    exit 1
+  fi
+  # :command.required_flags_filter
+  # :command.catch_all_filter
+  # :command.default_assignments
+  # :command.whitelist_filter
+  # :command.user_filter
+}
+
+# :command.parse_requirements
 labtastic_update_parse_requirements() {
   # :command.fixed_flags_filter
   case "${1:-}" in
@@ -921,6 +1139,22 @@ run() {
       labtastic_stop_usage
     else
       labtastic_stop_command
+    fi
+
+  elif [[ $action == "up" ]]; then
+    if [[ ${args[--help]:-} ]]; then
+      long_usage=yes
+      labtastic_up_usage
+    else
+      labtastic_up_command
+    fi
+
+  elif [[ $action == "down" ]]; then
+    if [[ ${args[--help]:-} ]]; then
+      long_usage=yes
+      labtastic_down_usage
+    else
+      labtastic_down_command
     fi
 
   elif [[ $action == "update" ]]; then
