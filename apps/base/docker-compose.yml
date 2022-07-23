@@ -45,7 +45,11 @@ services:
     networks:
       - labtastic
     labels:
-      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "traefik.http.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
+      - "traefik.http.routers.base-ca.entrypoints=web, websecure"
+      - "traefik.http.routers.base-ca.tls=true"
+      - "traefik.http.routers.base-ca.certresolver=labtastic"
   
   watchtower:
     image: containrrr/watchtower
@@ -57,9 +61,42 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
     networks:
       - labtastic
+  
+  dns:
+    image: technitium/dns-server
+    restart: always
+    profiles:
+      - base
+      - base-setup
+    networks:
+      - labtastic
+    environment:
+      DNS_SERVER_DOMAIN: "dns.${DOMAIN}"
+      DNS_SERVER_ADMIN_PASSWORD: "${BASE_DNS_ADMIN_PASSWORD}"
+      DNS_SERVER_PREFER_IPV6: "${BASE_DNS_SERVER_PREFER_IPV6}"
+      DNS_SERVER_OPTIONAL_PROTOCOL_DNS_OVER_HTTP: "${BASE_DNS_SERVER_OPTIONAL_PROTOCOL_DNS_OVER_HTTP}"
+      DNS_SERVER_RECURSION: "${BASE_DNS_SERVER_RECURSION}"
+      DNS_SERVER_ENABLE_BLOCKING: "${BASE_DNS_SERVER_ENABLE_BLOCKING}"
+      DNS_SERVER_ALLOW_TXT_BLOCKING_REPORT: "${BASE_DNS_SERVER_ALLOW_TXT_BLOCKING_REPORT}"
+      DNS_SERVER_FORWARDERS: "${BASE_DNS_SERVER_FORWARDERS}"
+      DNS_SERVER_FORWARDER_PROTOCOL: "${BASE_DNS_SERVER_FORWARDER_PROTOCOL}"
+      DNS_SERVER_LOG_USING_LOCAL_TIME: "${BASE_DNS_SERVER_LOG_USING_LOCAL_TIME}"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "traefik.http.routers.base-ca.rule=Host(`dns.${DOMAIN}`)"
+      - "traefik.http.routers.base-ca.entrypoints=web, websecure"
+      - "traefik.http.routers.base-ca.tls=true"
+      - "traefik.http.routers.base-ca.certresolver=labtastic"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - "$APP_DATA/base/dns:/etc/dns/config"
+
+
 
 networks:
   labtastic:

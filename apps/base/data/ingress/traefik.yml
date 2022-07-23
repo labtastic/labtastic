@@ -17,9 +17,9 @@ providers:
     network: labtastic
 
 certificatesResolvers:
-  smallstep:
+  labtastic:
     acme:
       email: "admin@labtastic.local"
-      storage: acme.json
+      storage: /etc/traefik/labtastic-ca.json
       caServer: https://labtastic-ca:9000/directory
       tlsChallenge: {}
