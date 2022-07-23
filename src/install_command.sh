@@ -6,3 +6,6 @@ if [ ! -f "apps/${args[appname]}/.setup-done" ]; then
 fi
 
 docker_compose_setup "${args[appname]}"
+
+info "setup for ${args[appname]} app finished!"
+info "please run './labtastic app ${args[appname]} --start' to finish installation"
