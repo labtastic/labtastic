@@ -47,7 +47,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "traefik.enable=true"
-      - "traefik.tcp.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
+      - "traefik.tcp.routers.base-ca.rule=HostSNI(`ca.${DOMAIN}`)"
       - "traefik.tcp.routers.base-ca.entrypoints=web, websecure"
       - "traefik.tcp.routers.base-ca.tls=true"
       - "traefik.tcp.routers.base-ca.tls.passthrough=true"
