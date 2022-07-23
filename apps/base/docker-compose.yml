@@ -50,6 +50,8 @@ services:
   watchtower:
     image: containrrr/watchtower
     restart: always
+    environment:
+      WATCHTOWER_LABEL_ENABLE: "true"
     profiles:
       - base
     volumes:
