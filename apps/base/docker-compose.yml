@@ -50,7 +50,7 @@ services:
       - "traefik.http.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
       - "traefik.http.routers.base-ca.entrypoints=web, websecure"
       - "traefik.http.routers.base-ca.tls=true"
-      - "traefik.http.routers.base-ca.tls.certresolver=labtastic"
+      - "traefik.http.routers.base-ca.tls.passthrough=true"
       - "traefik.http.services.base-ca.loadbalancer.server.port=9000"
   
   watchtower:
