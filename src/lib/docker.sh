@@ -5,9 +5,9 @@ generate_compose_files_list() {
 
   for app in ${!ENABLED_APPS[@]}; do
     if [[ $app -eq 1 ]]; then
-      files="apps/$app/docker-compose.yml"
+      files="apps/${ENABLED_APPS[$app]}/docker-compose.yml"
     else
-      files="${files}:apps/$app/docker-compose.yml"
+      files="${files}:apps/${ENABLED_APPS[$app]}/docker-compose.yml"
     fi
   done
 
@@ -21,9 +21,9 @@ generate_compose_profiles() {
 
   for app in ${!ENABLED_APPS[@]}; do
     if [[ $app -eq 1 ]]; then
-      files="$app"
+      files="${ENABLED_APPS[$app]}"
     else
-      files="${files},$app"
+      files="${files},${ENABLED_APPS[$app]}"
     fi
   done
 
