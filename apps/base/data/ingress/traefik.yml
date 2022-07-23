@@ -10,7 +10,7 @@ entryPoints:
 
 providers:
   file:
-    filename: manual.yml
+    filename: /etc/traefik/manual.yml
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
