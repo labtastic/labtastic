@@ -17,6 +17,7 @@ if ! command -v docker &> /dev/null
 then
   info "Installing docker..."
   curl -fsSL https://get.docker.com | bash
+  sudo usermod -A -G docker "$(whoami)"
 else
   info "docker already installed"
 fi

@@ -407,6 +407,7 @@ labtastic_init_command() {
   then
     info "Installing docker..."
     curl -fsSL https://get.docker.com | bash
+    sudo usermod -A -G docker "$(whoami)"
   else
     info "docker already installed"
   fi
