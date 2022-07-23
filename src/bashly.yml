@@ -45,6 +45,18 @@ commands:
 
   environment_variables: []
 
+- name: update
+  help: update labtastic
+
+  args: []
+
+  flags: []
+
+  examples:
+  - labtastic update
+
+  environment_variables: []
+
 # - name: upload
 #   alias: u
 #   help: Upload a file

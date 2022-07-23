@@ -36,6 +36,7 @@ labtastic_usage() {
   printf "Commands:\n"
   echo "  init      Initialize Labtastic"
   echo "  install   install an app"
+  echo "  update    update labtastic"
   echo
 
   if [[ -n $long_usage ]]; then
@@ -46,6 +47,15 @@ labtastic_usage() {
     echo
     echo "  --version, -v"
     printf "    Show version number\n"
+    echo
+
+    # :command.usage_environment_variables
+    printf "Environment Variables:\n"
+
+    # :environment_variable.usage
+    echo "  PROJECT_NAME"
+    printf "    specifies the compose project name\n"
+    printf "    Default: labtastic\n"
     echo
 
   fi
@@ -141,6 +151,39 @@ labtastic_install_usage() {
   fi
 }
 
+# :command.usage
+labtastic_update_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "labtastic update - update labtastic\n"
+    echo
+
+  else
+    printf "labtastic update - update labtastic\n"
+    echo
+
+  fi
+
+  printf "Usage:\n"
+  printf "  labtastic update\n"
+  printf "  labtastic update --help | -h\n"
+  echo
+
+  if [[ -n $long_usage ]]; then
+    printf "Options:\n"
+    # :command.usage_fixed_flags
+    echo "  --help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_examples
+    printf "Examples:\n"
+
+    printf "  labtastic update\n"
+    echo
+
+  fi
+}
+
 # :command.normalize_input
 normalize_input() {
   local arg flags
@@ -193,6 +236,13 @@ setup_app() {
   echo "# $1 Vars" >> .env
   cat "apps/$1/.env" >> .env
   echo "" >> .env
+
+  mkdir -p "$APP_DATA/$1"
+
+  if [ -d "./apps/$1/data" ]; then
+    cp --recursive --update "./apps/$1/data" --target-directory="$APP_DATA/$1"
+    find "$APP_DATA/$1" -name ".gitkeep" -t f -delete
+  fi
 }
 
 # src/lib/colors.sh
@@ -227,6 +277,73 @@ blue_underlined() { print_in_color "\e[4;34m" "$*"; }
 magenta_underlined() { print_in_color "\e[4;35m" "$*"; }
 cyan_underlined() { print_in_color "\e[4;36m" "$*"; }
 
+# src/lib/docker.sh
+generate_compose_files_list() {
+  source .env
+
+  files=""
+
+  for app in ${!ENABLED_APPS[@]}; do
+    if [[ $app -eq 1 ]]; then
+      files="apps/$app/docker-compose.yml"
+    else
+      files="${files}:apps/$app/docker-compose.yml"
+    fi
+  done
+
+  echo $files
+}
+
+generate_compose_profiles() {
+  source .env
+
+  profiles=""
+
+  for app in ${!ENABLED_APPS[@]}; do
+    if [[ $app -eq 1 ]]; then
+      files="$app"
+    else
+      files="${files},$app"
+    fi
+  done
+
+  echo $profiles
+}
+
+docker_compose_setup() {
+  export COMPOSE_PATH_SEPARATOR=":"
+  export COMPOSE_FILE=$(generate_compose_files_list)
+  export COMPOSE_PROFILES="$1-setup"
+
+  docker compose --project-directory $(pwd) up -d
+}
+
+docker_compose_up() {
+  export COMPOSE_PATH_SEPARATOR=":"
+  export COMPOSE_FILE=$(generate_compose_files_list)
+  export COMPOSE_PROFILES=$(generate_compose_profiles)
+
+  docker compose --project-directory $(pwd) up -d
+
+}
+
+docker_compose_stop_all() {
+  export COMPOSE_PATH_SEPARATOR=":"
+  export COMPOSE_FILE=$(generate_compose_files_list)
+  export COMPOSE_PROFILES=$(generate_compose_profiles)
+
+  docker compose --project-directory $(pwd) stop
+
+}
+
+docker_compose_stop() {
+  export COMPOSE_PATH_SEPARATOR=":"
+  export COMPOSE_FILE=$(generate_compose_files_list)
+  export COMPOSE_PROFILES="$1,$1-setup"
+
+  docker compose --project-directory $(pwd) stop
+}
+
 # src/lib/filters.sh
 filter_docker_running() {
   docker info > /dev/null 2>&1 || echo "Docker must be running"
@@ -243,11 +360,6 @@ function warn() {
 
 function error() {
   echo "$(red ERROR: $@)"
-}
-
-# src/lib/sample_function.sh
-sample_function() {
-  echo "it works"
 }
 
 # src/lib/yaml.sh
@@ -305,8 +417,6 @@ labtastic_init_command() {
     info "app data directory already exists"
   fi
 
-  docker network create labtastic
-
   info "creating initial .env config"
 
   echo "### ENABLED APPS ###" > .env
@@ -325,6 +435,10 @@ labtastic_init_command() {
 
   setup_app "base"
 
+  docker_compose_setup "base"
+
+  docker_compose_up
+
   touch .labtastic-init-done
 
   info "Labtastic is now intialized!"
@@ -339,9 +453,21 @@ labtastic_install_command() {
   # src/install_command.sh
   inspect_args
 
+  setup_app "${args[appname]}"
+
   DEFAULT_COMPOSE_FILE="apps/base/docker-compose.yml"
 
   export COMPOSE_PATH_SEPARATOR=":"
+}
+
+# :command.function
+labtastic_update_command() {
+  # src/update_command.sh
+  info "updating labtastic and apps"
+
+  git pull || git stash && git pull && git stash apply
+
+  info "finished updating labtastic and apps"
 }
 
 # :command.parse_requirements
@@ -361,6 +487,7 @@ parse_requirements() {
 
   esac
   # :command.environment_variables_filter
+  export PROJECT_NAME="${PROJECT_NAME:-labtastic}"
   # :command.dependencies_filter
   # :command.command_filter
   action=${1:-}
@@ -380,6 +507,13 @@ parse_requirements() {
     action="install"
     shift
     labtastic_install_parse_requirements "$@"
+    shift $#
+    ;;
+
+  update )
+    action="update"
+    shift
+    labtastic_update_parse_requirements "$@"
     shift $#
     ;;
 
@@ -533,6 +667,48 @@ labtastic_install_parse_requirements() {
   # :command.user_filter
 }
 
+# :command.parse_requirements
+labtastic_update_parse_requirements() {
+  # :command.fixed_flags_filter
+  case "${1:-}" in
+  --help | -h )
+    long_usage=yes
+    labtastic_update_usage
+    exit
+    ;;
+
+  esac
+  # :command.environment_variables_filter
+  # :command.dependencies_filter
+  # :command.command_filter
+  action="update"
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+    -?* )
+      printf "invalid option: %s\n" "$key"
+      exit 1
+      ;;
+
+    * )
+      # :command.parse_requirements_case
+      # :command.parse_requirements_case_simple
+      printf "invalid argument: %s\n" "$key"
+      exit 1
+      ;;
+
+    esac
+  done
+  # :command.required_args_filter
+  # :command.required_flags_filter
+  # :command.catch_all_filter
+  # :command.default_assignments
+  # :command.whitelist_filter
+  # :command.user_filter
+}
+
 # :command.initialize
 initialize() {
   version="0.1.0"
@@ -564,6 +740,14 @@ run() {
       labtastic_install_usage
     else
       labtastic_install_command
+    fi
+
+  elif [[ $action == "update" ]]; then
+    if [[ ${args[--help]:-} ]]; then
+      long_usage=yes
+      labtastic_update_usage
+    else
+      labtastic_update_command
     fi
 
   elif [[ $action == "root" ]]; then
