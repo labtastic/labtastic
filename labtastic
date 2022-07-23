@@ -35,7 +35,8 @@ labtastic_usage() {
   # :command.usage_commands
   printf "Commands:\n"
   echo "  init      Initialize Labtastic"
-  echo "  install   install an app"
+  echo "  install   install and prepare an app"
+  echo "  app       start/stop an app"
   echo "  update    update labtastic"
   echo
 
@@ -107,17 +108,17 @@ labtastic_init_usage() {
 # :command.usage
 labtastic_install_usage() {
   if [[ -n $long_usage ]]; then
-    printf "labtastic install - install an app\n"
+    printf "labtastic install - install and prepare an app\n"
     echo
 
   else
-    printf "labtastic install - install an app\n"
+    printf "labtastic install - install and prepare an app\n"
     echo
 
   fi
 
   printf "Usage:\n"
-  printf "  labtastic install APPNAME [options]\n"
+  printf "  labtastic install APPNAME\n"
   printf "  labtastic install --help | -h\n"
   echo
 
@@ -127,12 +128,7 @@ labtastic_install_usage() {
     echo "  --help, -h"
     printf "    Show this help\n"
     echo
-    # :command.usage_flags
-    # :flag.usage
-    echo "  --settings-file, -s SETTINGSFILE"
-    printf "    settings file location\n"
-    printf "    Default: settings.yml\n"
-    echo
+
     # :command.usage_args
     printf "Arguments:\n"
 
@@ -144,8 +140,58 @@ labtastic_install_usage() {
     # :command.usage_examples
     printf "Examples:\n"
 
-    printf "  labtastic install base\n"
-    printf "  labtastic install base -s settings2.yml\n"
+    printf "  labtastic install app-name\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+labtastic_app_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "labtastic app - start/stop an app\n"
+    echo
+
+  else
+    printf "labtastic app - start/stop an app\n"
+    echo
+
+  fi
+
+  printf "Usage:\n"
+  printf "  labtastic app APPNAME [options]\n"
+  printf "  labtastic app --help | -h\n"
+  echo
+
+  if [[ -n $long_usage ]]; then
+    printf "Options:\n"
+    # :command.usage_fixed_flags
+    echo "  --help, -h"
+    printf "    Show this help\n"
+    echo
+    # :command.usage_flags
+    # :flag.usage
+    echo "  --start"
+    printf "    start the given app\n"
+    echo
+
+    # :flag.usage
+    echo "  --stop"
+    printf "    stop the given app\n"
+    echo
+    # :command.usage_args
+    printf "Arguments:\n"
+
+    # :argument.usage
+    echo "  APPNAME"
+    printf "    name of app to be used\n"
+    echo
+
+    # :command.usage_examples
+    printf "Examples:\n"
+
+    printf "  labtastic app app-name --start\n"
+    printf "  labtastic app app-name --stop\n"
     echo
 
   fi
@@ -427,6 +473,30 @@ labtastic_install_command() {
 }
 
 # :command.function
+labtastic_app_command() {
+  # src/app_command.sh
+  if [ ! ${args[--stop]} -eq 1 || ! ${args[--start]} -eq 1 ]; then
+    error "must specify an action (--start/--stop)"
+  fi
+
+  if [ ${args[--stop]} -eq 1 ]; then
+    if [ ${args[appname]} -eq "all" ]; then
+      docker_compose_stop_all
+    else
+      docker_compose_stop "${args[appname]}"
+    fi
+  fi
+
+  if [ ${args[--start]} -eq 1 ]; then
+    if [ ${args[appname]} -eq "all" ]; then
+      docker_compose_start_all
+    else
+      docker_compose_start "${args[appname]}"
+    fi
+  fi
+}
+
+# :command.function
 labtastic_update_command() {
   # src/update_command.sh
   info "updating labtastic and apps"
@@ -473,6 +543,13 @@ parse_requirements() {
     action="install"
     shift
     labtastic_install_parse_requirements "$@"
+    shift $#
+    ;;
+
+  app )
+    action="app"
+    shift
+    labtastic_app_parse_requirements "$@"
     shift $#
     ;;
 
@@ -585,19 +662,80 @@ labtastic_install_parse_requirements() {
   while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
-    # :flag.case
-    --settings-file | -s )
-      # :flag.conflicts
-      # :flag.case_arg
-      if [[ -n ${2+x} ]]; then
-        # :flag.validations
-        args[--settings-file]="$2"
-        shift
+
+    -?* )
+      printf "invalid option: %s\n" "$key"
+      exit 1
+      ;;
+
+    * )
+      # :command.parse_requirements_case
+      # :command.parse_requirements_case_simple
+      if [[ -z ${args[appname]+x} ]]; then
+        # :argument.validations
+        args[appname]=$1
         shift
       else
-        printf "%s\n" "--settings-file requires an argument: --settings-file, -s SETTINGSFILE"
+        printf "invalid argument: %s\n" "$key"
         exit 1
       fi
+      ;;
+
+    esac
+  done
+  # :command.required_args_filter
+  if [[ -z ${args[appname]+x} ]]; then
+    printf "missing required argument: APPNAME\nusage: labtastic install APPNAME\n"
+    exit 1
+  fi
+  # :command.required_flags_filter
+  # :command.catch_all_filter
+  # :command.default_assignments
+  # :command.whitelist_filter
+  # :command.user_filter
+}
+
+# :command.parse_requirements
+labtastic_app_parse_requirements() {
+  # :command.fixed_flags_filter
+  case "${1:-}" in
+  --help | -h )
+    long_usage=yes
+    labtastic_app_usage
+    exit
+    ;;
+
+  esac
+  # :command.environment_variables_filter
+  # :command.dependencies_filter
+  # :command.command_filter
+  action="app"
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+    # :flag.case
+    --start )
+      # :flag.conflicts
+      if [[ -n "${args[--stop]:-}" ]]; then
+        printf "conflicting options: %s cannot be used with %s\n" "$key" "--stop"
+        exit 1
+      fi
+      # :flag.case_no_arg
+      args[--start]=1
+      shift
+      ;;
+
+    # :flag.case
+    --stop )
+      # :flag.conflicts
+      if [[ -n "${args[--start]:-}" ]]; then
+        printf "conflicting options: %s cannot be used with %s\n" "$key" "--start"
+        exit 1
+      fi
+      # :flag.case_no_arg
+      args[--stop]=1
+      shift
       ;;
 
     -?* )
@@ -622,13 +760,12 @@ labtastic_install_parse_requirements() {
   done
   # :command.required_args_filter
   if [[ -z ${args[appname]+x} ]]; then
-    printf "missing required argument: APPNAME\nusage: labtastic install APPNAME [options]\n"
+    printf "missing required argument: APPNAME\nusage: labtastic app APPNAME [options]\n"
     exit 1
   fi
   # :command.required_flags_filter
   # :command.catch_all_filter
   # :command.default_assignments
-  [[ -n ${args[--settings-file]:-} ]] || args[--settings-file]="settings.yml"
   # :command.whitelist_filter
   # :command.user_filter
 }
@@ -706,6 +843,14 @@ run() {
       labtastic_install_usage
     else
       labtastic_install_command
+    fi
+
+  elif [[ $action == "app" ]]; then
+    if [[ ${args[--help]:-} ]]; then
+      long_usage=yes
+      labtastic_app_usage
+    else
+      labtastic_app_command
     fi
 
   elif [[ $action == "update" ]]; then

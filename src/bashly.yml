@@ -25,23 +25,42 @@ commands:
   environment_variables: []
 
 - name: install
-  help: install an app
+  help: install and prepare an app
 
   args:
     - name: appname
       help: name of app to be installed
       required: true
 
-  flags:
-    - arg: settingsfile
-      long: --settings-file
-      short: -s
-      help: settings file location
-      default: settings.yml
+  flags: []
 
   examples:
-  - labtastic install base
-  - labtastic install base -s settings2.yml
+  - labtastic install app-name
+
+  environment_variables: []
+
+- name: app
+  help: start/stop an app
+
+  args:
+    - name: appname
+      help: name of app to be used
+      required: true
+
+  flags:
+    - long: --start
+      help: start the given app
+      conflicts:
+        - --stop
+    - long: --stop
+      help: stop the given app
+      conflicts:
+        - --start
+      
+
+  examples:
+  - labtastic app app-name --start
+  - labtastic app app-name --stop
 
   environment_variables: []
 
