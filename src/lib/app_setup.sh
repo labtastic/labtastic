@@ -10,7 +10,7 @@ setup_app() {
   mkdir -p "$APP_DATA/$1"
 
   if [ -d "./apps/$1/data" ]; then
-    cp --recursive --update "./apps/$1/data/*" --target-directory="$APP_DATA/$1"
+    cp --recursive --update ./apps/${1}/data/* ${APP_DATA}/${1}
     find "$APP_DATA/$1" -name ".gitkeep" -type f -delete
   fi
 }
