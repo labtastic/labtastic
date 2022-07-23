@@ -35,7 +35,7 @@ docker_compose_setup() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES="$1-setup"
 
-  docker compose --project-directory $(pwd) up -d
+  docker compose --project-directory . up -d
 }
 
 docker_compose_up() {
@@ -43,7 +43,7 @@ docker_compose_up() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES=$(generate_compose_profiles)
 
-  docker compose --project-directory $(pwd) up -d 
+  docker compose --project-directory . up -d 
 }
 
 docker_compose_stop_all() {
@@ -51,7 +51,7 @@ docker_compose_stop_all() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES=$(generate_compose_profiles)
   
-  docker compose --project-directory $(pwd) stop 
+  docker compose --project-directory . stop 
 }
 
 docker_compose_stop() {
@@ -59,5 +59,5 @@ docker_compose_stop() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES="$1,$1-setup"
 
-  docker compose --project-directory $(pwd) stop
+  docker compose --project-directory . stop
 }
