@@ -1,0 +1,25 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+providers:
+  file:
+    filename: manual.yml
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: labtastic
+
+certificatesResolvers:
+  smallstep:
+    acme:
+      email: "admin@labtastic.local"
+      storage: acme.json
+      caServer: https://labtastic-ca:9000/directory
+      tlsChallenge: {}

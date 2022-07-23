@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  ingress:
+    image: traefik
+    environment:
+      LEGO_CA_CERTIFICATES: "/root_ca.crt"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${APP_DATA}/base/ingress:/etc/traefik"
+      - "${APP_DATA}/base/ca/certs/root_ca.crt:/root_ca.crt:ro"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    profiles:
+      - base
+    depends_on:
+      - labtastic-ca
+
+  labtastic-ca:
+    image: smallstep/step-ca
+    healthcheck:
+      test: ["curl", "https://localhost:9000/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    environment:
+      DOCKER_STEPCA_INIT_NAME: Labtastic
+      DOCKER_STEPCA_INIT_DNS_NAMES: localhost,labtastic-ca,ca.${DOMAIN}
+      DOCKER_STEPCA_INIT_SSH: "yes"
+      DOCKER_STEPCA_INIT_PASSWORD: ${BASE_CA_INIT_PASSWORD}
+    volumes:
+      - "$APP_DATA/base/ca:/home/step"
+    profiles:
+      - base
+      - base-setup
+
+networks:
+  default:
+    ipam:
+      driver: bridge
+      config:
+        - subnet: 10.255.0.0/16
