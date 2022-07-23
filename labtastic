@@ -317,7 +317,7 @@ docker_compose_setup() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES="$1-setup"
 
-  docker compose --project-directory . up -d
+  docker compose up -d
 }
 
 docker_compose_up() {
@@ -325,7 +325,7 @@ docker_compose_up() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES=$(generate_compose_profiles)
 
-  docker compose --project-directory . up -d
+  docker compose up -d
 
 }
 
@@ -334,7 +334,7 @@ docker_compose_stop_all() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES=$(generate_compose_profiles)
 
-  docker compose --project-directory . stop
+  docker compose stop
 
 }
 
@@ -343,7 +343,7 @@ docker_compose_stop() {
   export COMPOSE_FILE=$(generate_compose_files_list)
   export COMPOSE_PROFILES="$1,$1-setup"
 
-  docker compose --project-directory . stop
+  docker compose stop
 }
 
 # src/lib/filters.sh
@@ -411,6 +411,8 @@ labtastic_init_command() {
   else
     info "docker already installed"
   fi
+
+  docker network create --subnet "10.255.0.0/16" --attachable labtastic
 
   if [ ! -d "${args[appdata]}" ]; then
     info "creating app data directory: ${args[appdata]}"

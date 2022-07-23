@@ -17,6 +17,8 @@ services:
       - base
     depends_on:
       - labtastic-ca
+    networks:
+      - labtastic
 
   labtastic-ca:
     image: smallstep/step-ca
@@ -36,10 +38,9 @@ services:
     profiles:
       - base
       - base-setup
+    networks:
+      - labtastic
 
 networks:
-  default:
-    ipam:
-      driver: bridge
-      config:
-        - subnet: 10.255.0.0/16
+  labtastic:
+    external: true

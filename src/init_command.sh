@@ -20,6 +20,8 @@ else
   info "docker already installed"
 fi
 
+docker network create --subnet "10.255.0.0/16" --attachable labtastic 
+
 if [ ! -d "${args[appdata]}" ]; then
   info "creating app data directory: ${args[appdata]}"
   sudo mkdir -p "${args[appdata]}"
