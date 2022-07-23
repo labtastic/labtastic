@@ -1,4 +1,4 @@
-if [ ! "${args[--stop]}" == "1" || ! "${args[--start]}" == "1" ]; then
+if [[ ! "${args[--stop]}" == "1" || ! "${args[--start]}" == "1" ]]; then
   error "must specify an action (--start/--stop)"
 fi
 
