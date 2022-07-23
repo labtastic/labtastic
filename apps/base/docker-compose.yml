@@ -46,6 +46,7 @@ services:
       - labtastic
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "traefik.enable=true"
       - "traefik.http.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
       - "traefik.http.routers.base-ca.entrypoints=web, websecure"
       - "traefik.http.routers.base-ca.tls=true"
@@ -86,6 +87,7 @@ services:
       DNS_SERVER_LOG_USING_LOCAL_TIME: "${BASE_DNS_SERVER_LOG_USING_LOCAL_TIME}"
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "traefik.enable=true"
       - "traefik.http.routers.base-ca.rule=Host(`dns.${DOMAIN}`)"
       - "traefik.http.routers.base-ca.entrypoints=web, websecure"
       - "traefik.http.routers.base-ca.tls=true"

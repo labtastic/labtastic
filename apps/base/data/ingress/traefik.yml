@@ -9,8 +9,6 @@ entryPoints:
     address: ":443"
 
 providers:
-  file:
-    filename: /etc/traefik/manual.yml
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
@@ -23,3 +21,8 @@ certificatesResolvers:
       storage: /etc/traefik/labtastic-ca.json
       caServer: https://labtastic-ca:9000/directory
       tlsChallenge: {}
+  
+api:
+  dashboard: true
+  insecure: true
+  debug: true

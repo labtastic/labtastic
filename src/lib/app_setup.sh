@@ -9,7 +9,7 @@ setup_app() {
   fi
 
   echo "# $1 Vars" >> .env
-  echo "ENABLED_APPS+=(\"$1\")"
+  echo "ENABLED_APPS+=(\"$1\")" >> .env
   cat "apps/$1/.env" >> .env
   echo "" >> .env
 
