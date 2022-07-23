@@ -50,7 +50,7 @@ services:
       - "traefik.http.routers.base-ca.rule=Host(`ca.${DOMAIN}`)"
       - "traefik.http.routers.base-ca.entrypoints=web, websecure"
       - "traefik.http.routers.base-ca.tls=true"
-      - "traefik.http.routers.base-ca.certresolver=labtastic"
+      - "traefik.http.routers.base-ca.tls.certresolver=labtastic"
   
   watchtower:
     image: containrrr/watchtower
@@ -91,7 +91,7 @@ services:
       - "traefik.http.routers.base-ca.rule=Host(`dns.${DOMAIN}`)"
       - "traefik.http.routers.base-ca.entrypoints=web, websecure"
       - "traefik.http.routers.base-ca.tls=true"
-      - "traefik.http.routers.base-ca.certresolver=labtastic"
+      - "traefik.http.routers.base-ca.tls.certresolver=labtastic"
     ports:
       - "53:53/tcp"
       - "53:53/udp"

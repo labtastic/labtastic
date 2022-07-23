@@ -7,12 +7,16 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
+    http:
+      certResolver: labtastic
 
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     network: labtastic
+    watch: true
+    swarmMode: false
 
 certificatesResolvers:
   labtastic:
@@ -26,3 +30,6 @@ api:
   dashboard: true
   insecure: true
   debug: true
+
+metrics:
+  prometheus: {}
