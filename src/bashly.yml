@@ -39,28 +39,27 @@ commands:
 
   environment_variables: []
 
-- name: app
-  help: start/stop an app
+- name: start
+  help: start an app
 
   args:
     - name: appname
-      help: name of app to be used
       required: true
 
-  flags:
-    - long: --start
-      help: start the given app
-      conflicts:
-        - --stop
-    - long: --stop
-      help: stop the given app
-      conflicts:
-        - --start
-      
-
   examples:
-  - labtastic app app-name --start
-  - labtastic app app-name --stop
+  - labtastic start app-name
+
+  environment_variables: []
+
+- name: stop
+  help: stop an app
+
+  args:
+    - name: appname
+      required: true
+      
+  examples:
+  - labtastic start app-name
 
   environment_variables: []
 

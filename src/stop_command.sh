@@ -1,0 +1,1 @@
+docker_compose_stop "${args[appname]}"

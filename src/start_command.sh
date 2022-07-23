@@ -1,0 +1,1 @@
+docker_compose_start "${args[appname]}"
