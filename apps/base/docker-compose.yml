@@ -21,7 +21,7 @@ services:
     networks:
       - labtastic
     labels:
-      - com.centurylinklabs.watchtower.enable="${AUTO_UPDATE}"
+      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
 
   labtastic-ca:
     image: smallstep/step-ca
@@ -45,7 +45,7 @@ services:
     networks:
       - labtastic
     labels:
-      - com.centurylinklabs.watchtower.enable="${AUTO_UPDATE}"
+      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
   
   watchtower:
     image: containrrr/watchtower
@@ -57,7 +57,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - com.centurylinklabs.watchtower.enable="${AUTO_UPDATE}"
+      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
     networks:
       - labtastic
 
