@@ -47,7 +47,7 @@ services:
       prometheus:
         condition: service_healthy
       loki:
-        condition: service_started
+        condition: service_healthy
       postgresql:
         condition: service_healthy
     
@@ -95,6 +95,11 @@ services:
       options: 
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -nv -t1 --spider 'http://localhost:3100/ready' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=loki"
@@ -108,8 +113,8 @@ services:
       - "traefik.http.services.monitoring-loki.loadbalancer.server.port=3100"
     volumes:
       - "$APP_DATA/monitoring/loki/config/:/etc/loki/"
-      - "$APP_DATA/monitoring/loki/data/:/tmp/loki/chunks/"
-      - "$APP_DATA/monitoring/loki/rules/:/tmp/loki/rules/"
+      - "$APP_DATA/monitoring/loki/data/:/data/loki/chunks/"
+      - "$APP_DATA/monitoring/loki/rules/:/data/loki/rules/"
     networks:
       - labtastic
   
