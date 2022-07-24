@@ -102,7 +102,7 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
     healthcheck:
-      test: ["CMD", "curl", "-f", "https://localhost:5380/api/"]
+      test: ["CMD", "curl", "-f", "http://localhost:5380/api/"]
       interval: 10s
       timeout: 10s
       retries: 5
