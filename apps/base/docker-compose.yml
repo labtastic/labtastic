@@ -35,7 +35,8 @@ services:
     networks:
       - labtastic
     labels:
-      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=traefik"
 
   labtastic-ca:
     image: smallstep/step-ca
@@ -65,6 +66,7 @@ services:
       - labtastic
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=labtastic-ca"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=ca"
       - "traefik.enable=true"
@@ -94,6 +96,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=watchtower"
     networks:
       - labtastic
   
@@ -129,6 +132,7 @@ services:
       DNS_SERVER_LOG_USING_LOCAL_TIME: "${BASE_DNS_SERVER_LOG_USING_LOCAL_TIME}"
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=dns"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=dns"
       - "traefik.enable=true"

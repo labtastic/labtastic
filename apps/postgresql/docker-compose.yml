@@ -53,6 +53,7 @@ services:
       PG_EXPORTER_INCLUDE_DATABASES: "${POSTGRESQL_PG_EXPORTER_INCLUDE_DATABASES}"
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=postgresql"
     networks:
       - labtastic
     depends_on:

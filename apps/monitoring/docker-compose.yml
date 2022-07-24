@@ -27,6 +27,7 @@ services:
       GF_RENDERING_CALLBACK_URL: "http://grafana:3000/"
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=grafana"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=grafana"
       - "traefik.enable=true"
@@ -60,6 +61,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     profiles:
       - monitoring
     environment:
@@ -100,6 +103,7 @@ services:
       - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=loki"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=loki"
       - "traefik.enable=true"
@@ -128,6 +132,7 @@ services:
       - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=promtail"
     volumes:
       - "$APP_DATA/monitoring/promtail/:/etc/promtail/"
       - "/var/log/:/var/log/"
@@ -167,6 +172,7 @@ services:
       - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=node"
     volumes:
       - "/proc:/host/proc:ro"
       - "/sys:/host/sys:ro"
@@ -189,6 +195,7 @@ services:
       - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=alertmanager"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=alertmanager"
       - "traefik.enable=true"
@@ -218,11 +225,13 @@ services:
       - /dev/kmsg:/dev/kmsg
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=cadvisor"
     volumes:
       - "/:/rootfs:ro"
       - "/var/run:/var/run:ro"
       - "/sys:/sys:ro"
       - "/var/lib/docker:/var/lib/docker:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/cgroup:/cgroup:ro"
     networks:
       - labtastic
@@ -239,6 +248,7 @@ services:
       - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=pushgateway"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=pushgateway"
       - "traefik.enable=true"
