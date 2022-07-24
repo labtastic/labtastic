@@ -613,7 +613,7 @@ generate_compose_files_list() {
   files=""
 
   for app in ${ENABLED_APPS[@]}; do
-      files="$files -f apps/${ENABLED_APPS[$app]}/docker-compose.yml"
+      files="$files -f apps/$app/docker-compose.yml"
   done
 
   echo $files
