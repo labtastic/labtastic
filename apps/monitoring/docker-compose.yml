@@ -55,7 +55,7 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9090/-/ready"]
+      test: ["CMD-SHELL", "wget -nv -t1 --spider 'http://localhost:9090/-/ready' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
