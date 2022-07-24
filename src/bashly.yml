@@ -95,6 +95,34 @@ commands:
 
   environment_variables: []
 
+- name: status
+  help: show status of all containers
+
+  args: []
+  
+  flags: []
+      
+  examples:
+  - labtastic status
+
+  environment_variables: []
+
+- name: logs
+  help: tail logs of give app container
+
+  args:
+    - name: appname
+      required: true
+    - name: servicename
+      required: true
+  
+  flags: []
+      
+  examples:
+  - labtastic status
+
+  environment_variables: []
+
 - name: update
   help: update labtastic
 
