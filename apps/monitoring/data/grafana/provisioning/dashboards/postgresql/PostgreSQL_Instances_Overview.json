@@ -9871,7 +9871,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up\"}, environment)",
         "hide": 0,
         "includeAll": true,
@@ -9899,7 +9899,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(pg_up{environment=~\"$environment\"},node_name)",
         "hide": 0,
         "includeAll": true,
@@ -9927,7 +9927,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(pg_up{node_name=~\"$node_name\",environment=~\"$environment\"}, service_name)",
         "hide": 0,
         "includeAll": true,
@@ -9955,7 +9955,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
         "hide": 2,
         "includeAll": true,
@@ -9982,7 +9982,7 @@
           "text": "4194304",
           "value": "4194304"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10008,7 +10008,7 @@
           "text": "11.14",
           "value": "11.14"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10034,7 +10034,7 @@
           "text": "100",
           "value": "100"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10060,7 +10060,7 @@
           "text": "134217728",
           "value": "134217728"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10086,7 +10086,7 @@
           "text": "4194304",
           "value": "4194304"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10112,7 +10112,7 @@
           "text": "16777216",
           "value": "16777216"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10138,7 +10138,7 @@
           "text": "67108864",
           "value": "67108864"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10164,7 +10164,7 @@
           "text": "8192",
           "value": "8192"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10191,7 +10191,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10217,7 +10217,7 @@
           "text": "300",
           "value": "300"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10243,7 +10243,7 @@
           "text": "100",
           "value": "100"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10269,7 +10269,7 @@
           "text": "1",
           "value": "1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10295,7 +10295,7 @@
           "text": "4",
           "value": "4"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10321,7 +10321,7 @@
           "text": "4294967296",
           "value": "4294967296"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10347,7 +10347,7 @@
           "text": "1",
           "value": "1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10373,7 +10373,7 @@
           "text": "1",
           "value": "1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10399,7 +10399,7 @@
           "text": "1",
           "value": "1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10425,7 +10425,7 @@
           "text": "0.1",
           "value": "0.1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10451,7 +10451,7 @@
           "text": "50",
           "value": "50"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10477,7 +10477,7 @@
           "text": "0.2",
           "value": "0.2"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10503,7 +10503,7 @@
           "text": "50",
           "value": "50"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10529,7 +10529,7 @@
           "text": "1647512509000",
           "value": "1647512509000"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10555,7 +10555,7 @@
           "text": "0.02",
           "value": "0.02"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10581,7 +10581,7 @@
           "text": "3",
           "value": "3"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10607,7 +10607,7 @@
           "text": "60",
           "value": "60"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10633,7 +10633,7 @@
           "text": "200000000",
           "value": "200000000"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10659,7 +10659,7 @@
           "text": "0",
           "value": "0"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10685,7 +10685,7 @@
           "text": "1647512509000",
           "value": "1647512509000"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10711,7 +10711,7 @@
           "text": "0",
           "value": "0"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10737,7 +10737,7 @@
           "text": "0",
           "value": "0"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10763,7 +10763,7 @@
           "text": "10",
           "value": "10"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10789,7 +10789,7 @@
           "text": "1073741824",
           "value": "1073741824"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10815,7 +10815,7 @@
           "text": "83886080",
           "value": "83886080"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10841,7 +10841,7 @@
           "text": "0",
           "value": "0"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10867,7 +10867,7 @@
           "text": "8",
           "value": "8"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10893,7 +10893,7 @@
           "text": "2",
           "value": "2"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10919,7 +10919,7 @@
           "text": "2",
           "value": "2"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10945,7 +10945,7 @@
           "text": "1647512509000",
           "value": "1647512509000"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10971,7 +10971,7 @@
           "text": "400000000",
           "value": "400000000"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": false,
@@ -10997,7 +10997,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
         "hide": 2,
         "includeAll": true,
@@ -11024,7 +11024,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
         "hide": 2,
         "includeAll": true,
@@ -11051,7 +11051,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
         "hide": 2,
         "includeAll": true,
@@ -11078,7 +11078,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
         "hide": 2,
         "includeAll": true,
@@ -11105,7 +11105,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
         "hide": 2,
         "includeAll": true,
@@ -11132,7 +11132,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
         "hide": 2,
         "includeAll": true,

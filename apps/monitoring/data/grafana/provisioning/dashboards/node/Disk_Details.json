@@ -2095,7 +2095,7 @@
           "text": "auto",
           "value": "$__auto_interval_interval"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "hide": 0,
         "includeAll": false,
         "label": "Interval",
@@ -2156,7 +2156,7 @@
           "text": "pmm-server",
           "value": "pmm-server"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"node_disk_reads_completed_total|aws_rds_disk_queue_depth_average|rdsosmetrics_diskIO_readLatency|azure_storage_percent_average\"}, node_name)",
         "hide": 0,
         "includeAll": false,
@@ -2184,7 +2184,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"node_disk_reads_completed_total|rdsosmetrics_diskIO_util\",node_name=~\"$node_name\", device!~\"dm-.+\"}, device)",
         "hide": 0,
         "includeAll": true,
@@ -2211,7 +2211,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
         "hide": 2,
         "includeAll": true,
@@ -2238,7 +2238,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(node_filesystem_avail_bytes{node_name=~\"$node_name\", fstype!~\"rootfs|selinuxfs|autofs|rpc_pipefs|tmpfs\"}, mountpoint)",
         "hide": 2,
         "includeAll": true,

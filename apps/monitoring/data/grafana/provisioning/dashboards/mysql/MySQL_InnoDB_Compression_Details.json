@@ -3356,7 +3356,7 @@
           "text": "auto",
           "value": "$__auto_interval_interval"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "hide": 0,
         "includeAll": false,
         "label": "Interval",
@@ -3416,7 +3416,7 @@
           "text": "ps_8.0_3.144.164.237_1",
           "value": "ps_8.0_3.144.164.237_1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up, service_name)",
         "hide": 0,
         "includeAll": false,
@@ -3444,7 +3444,7 @@
           "text": "ip-10-178-2-86.us-east-2.compute.internal",
           "value": "ip-10-178-2-86.us-east-2.compute.internal"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{service_name=\"$service_name\"}, node_name)",
         "hide": 2,
         "includeAll": false,
@@ -3472,7 +3472,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "",
         "hide": 2,
         "includeAll": true,
@@ -3499,7 +3499,7 @@
           "text": "ip-10-178-2-8",
           "value": "ip-10-178-2-8"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=\"$node_name\"},node_name)",
         "hide": 2,
         "includeAll": false,
@@ -3527,7 +3527,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
         "hide": 2,
         "includeAll": true,
@@ -3554,7 +3554,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, cluster)",
         "hide": 2,
         "includeAll": true,
@@ -3581,7 +3581,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
         "hide": 2,
         "includeAll": true,
@@ -3608,7 +3608,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
         "hide": 2,
         "includeAll": true,
@@ -3635,7 +3635,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
         "hide": 2,
         "includeAll": true,
@@ -3662,7 +3662,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
         "hide": 2,
         "includeAll": true,
@@ -3689,7 +3689,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
         "hide": 2,
         "includeAll": true,
@@ -3716,7 +3716,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
         "hide": 2,
         "includeAll": true,

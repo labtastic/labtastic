@@ -135,7 +135,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -148,7 +148,7 @@
       "type": "row"
     },
     {
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "mappings": [
@@ -302,7 +302,7 @@
       "pluginVersion": "8.3.5",
       "targets": [
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "exemplar": false,
           "expr": "count by (service_name,proxy) (haproxy_frontend_status{service_name=~\"$service_name\",proxy=~\"$frontend\"})",
           "format": "time_series",
@@ -383,7 +383,7 @@
       "pluginVersion": "8.3.5",
       "targets": [
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "exemplar": false,
           "expr": "avg by (service_name,proxy) (haproxy_backend_status{service_name=~\"$service_name\",proxy=~\"$backend\"})",
           "format": "time_series",
@@ -397,7 +397,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "mappings": [
@@ -471,7 +471,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -542,7 +542,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -656,7 +656,7 @@
         }
       ],
       "crosshairColor": "#8F070C",
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "description": "",
       "display": "timeline",
       "expandFromQueryS": 0,
@@ -768,7 +768,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -782,7 +782,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Total number of sessions.",
           "editable": true,
@@ -1061,7 +1061,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Observed number of connections per second",
           "editable": true,
@@ -1178,7 +1178,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -1294,7 +1294,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "",
           "editable": true,
@@ -1400,7 +1400,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "",
           "editable": true,
@@ -1505,7 +1505,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "",
           "editable": true,
@@ -1610,7 +1610,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "",
           "editable": true,
@@ -1716,7 +1716,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1730,7 +1730,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Total number of sessions.",
           "editable": true,
@@ -1877,7 +1877,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "avg by (proxy) (haproxy_backend_limit_sessions{proxy=~\"$backend\",service_name=~\"$service_name\"})",
               "format": "table",
@@ -1887,7 +1887,7 @@
               "refId": "A"
             },
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "avg by (proxy) (haproxy_backend_max_sessions{proxy=~\"$backend\",service_name=~\"$service_name\"})",
               "format": "table",
@@ -2009,7 +2009,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -2125,7 +2125,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Total number of data transfers aborted by the server or a client",
           "editable": true,
@@ -2243,7 +2243,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of connection errors",
           "editable": true,
@@ -2349,7 +2349,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of connection establishment attempts",
           "editable": true,
@@ -2455,7 +2455,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of connection reuses",
           "editable": true,
@@ -2561,7 +2561,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Avg. queue time for last 1024 successful connections.",
           "editable": true,
@@ -2667,7 +2667,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Current number of queued requests not assigned to any server.",
           "editable": true,
@@ -2773,7 +2773,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of denied responses",
           "editable": true,
@@ -2879,7 +2879,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of denied requests",
           "editable": true,
@@ -2985,7 +2985,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "",
           "editable": true,
@@ -3091,7 +3091,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of redispatch warnings",
           "editable": true,
@@ -3197,7 +3197,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of failed header rewriting warnings",
           "editable": true,
@@ -3304,7 +3304,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3407,7 +3407,7 @@
           "repeatDirection": "v",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_weight{service_name=~\"$service_name\",proxy=~\"$active_backend\"})",
               "format": "table",
@@ -3417,7 +3417,7 @@
               "refId": "A"
             },
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_max_session_rate{service_name=~\"$service_name\",proxy=~\"$active_backend\"})",
               "format": "table",
@@ -3427,7 +3427,7 @@
               "refId": "B"
             },
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_last_session_seconds{service_name=~\"$service_name\",proxy=~\"$active_backend\"})",
               "format": "table",
@@ -3483,7 +3483,7 @@
             }
           ],
           "crosshairColor": "#8F070C",
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "",
           "display": "timeline",
           "expandFromQueryS": 0,
@@ -3646,7 +3646,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "fieldConfig": {
             "defaults": {
@@ -3736,7 +3736,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -3834,7 +3834,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -3978,7 +3978,7 @@
           "repeatDirection": "v",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_queue_limit{service_name=~\"$service_name\",proxy=~\"$backend\"})",
               "format": "table",
@@ -3989,7 +3989,7 @@
               "refId": "A"
             },
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_max_queue{service_name=~\"$service_name\",proxy=~\"$backend\"})",
               "format": "table",
@@ -4038,7 +4038,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of queued requests",
           "fieldConfig": {
@@ -4127,7 +4127,7 @@
           }
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "Limit on the number of available idle connections.",
           "fieldConfig": {
             "defaults": {
@@ -4234,7 +4234,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of connection establishment attempts",
           "fieldConfig": {
@@ -4327,7 +4327,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of connection reuses",
           "fieldConfig": {
@@ -4420,7 +4420,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of connection errors",
           "fieldConfig": {
@@ -4513,7 +4513,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Observed request+response time (request+queue+connect+response+processing)",
           "fieldConfig": {
@@ -4606,7 +4606,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of response errors",
           "fieldConfig": {
@@ -4699,7 +4699,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of data transfers aborted by the client",
           "fieldConfig": {
@@ -4792,7 +4792,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of retry warnings",
           "fieldConfig": {
@@ -4885,7 +4885,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of redispatch warnings",
           "fieldConfig": {
@@ -4978,7 +4978,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of failed header rewriting warnings",
           "fieldConfig": {
@@ -5117,7 +5117,7 @@
           "repeatDirection": "v",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_check_failures_total{service_name=~\"$service_name\",proxy=~\"$backend\"})",
               "format": "table",
@@ -5128,7 +5128,7 @@
               "refId": "A"
             },
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "max by (server,proxy) (haproxy_server_check_up_down_total{service_name=~\"$service_name\",proxy=~\"$backend\"})",
               "format": "table",
@@ -5177,7 +5177,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Number of data transfers aborted by the server",
           "fieldConfig": {
@@ -5271,7 +5271,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -5285,7 +5285,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Total of HTTP responses.",
           "editable": true,
@@ -5406,7 +5406,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -5521,7 +5521,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "",
           "editable": true,
@@ -5627,7 +5627,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "The request was intercepted and locally handled by haproxy. Generally\n it means that this was a redirect or a stats request.",
           "editable": true,
@@ -5803,7 +5803,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "time() - haproxy_process_start_time_seconds{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -5881,7 +5881,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_nbproc{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -5959,7 +5959,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_nbthread{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -6038,7 +6038,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_max_memory_bytes{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -6117,7 +6117,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_max_fds{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -6196,7 +6196,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_max_sockets{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -6275,7 +6275,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_max_connections{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -6354,7 +6354,7 @@
           "pluginVersion": "8.3.5",
           "targets": [
             {
-              "datasource": "Metrics",
+              "datasource": "Prometheus",
               "exemplar": false,
               "expr": "haproxy_process_max_pipes{service_name=\"$service_name\"}",
               "format": "time_series",
@@ -6768,7 +6768,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Metrics",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -6778,7 +6778,7 @@
       "id": 1004,
       "panels": [
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "The parameter shows how long a system has been “up” and running without a shut down or restart.",
           "fieldConfig": {
             "defaults": {
@@ -6856,7 +6856,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "The system load is a measurement of the computational work the system is performing. Each running process either using or waiting for CPU resources adds 1 to the load.",
           "fieldConfig": {
             "defaults": {
@@ -6936,7 +6936,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "RAM (Random Access Memory) is the hardware in a computing device where the operating system, application programs and data in current use are kept so they can be quickly reached by the device's processor.",
           "fieldConfig": {
             "defaults": {
@@ -7014,7 +7014,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "Percent of Memory Available\nNote: on Modern Linux Kernels amount of Memory Available for application is not the same as Free+Cached+Buffers",
           "fieldConfig": {
             "defaults": {
@@ -7094,7 +7094,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "RAM + SWAP",
           "fieldConfig": {
             "defaults": {
@@ -7172,7 +7172,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "Sum of disk space on all partitions. Note  it can be significantly over-reported in some installations",
           "fieldConfig": {
             "defaults": {
@@ -7256,7 +7256,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "description": "Lowest percent of the disk space available",
           "fieldConfig": {
             "defaults": {
@@ -7336,7 +7336,7 @@
           "type": "stat"
         },
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "gridPos": {
             "h": 3,
             "w": 3,
@@ -7366,7 +7366,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "The CPU time is measured in clock ticks or seconds. It is useful to measure CPU time as a percentage of the CPU's capacity, which is called the CPU usage.",
           "editable": true,
@@ -7513,7 +7513,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "When a system is running with maximum CPU utilization, the transmitting and receiving threads must all share the available CPU. This will cause data to be queued more frequently to cope with the lack of CPU. CPU Saturation may be measured as the length of a wait queue, or the time spent waiting on the queue.",
           "editable": true,
@@ -7651,7 +7651,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Disk I/O includes read or write or input/output operations involving a physical disk. It is the speed with which the data transfer takes place between the hard disk drive and RAM.\n\nSwap Activity is memory management that involves swapping sections of memory to and from physical storage.",
           "editable": true,
@@ -7816,7 +7816,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "decimals": 2,
           "description": "Network traffic refers to the amount of data moving across a network at a given point in time.",
           "editable": true,
@@ -8024,7 +8024,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(haproxy_server_status, service_name)",
         "hide": 0,
         "includeAll": false,
@@ -8052,7 +8052,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(haproxy_backend_status{service_name=\"$service_name\"}, proxy)",
         "hide": 0,
         "includeAll": true,
@@ -8079,7 +8079,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(haproxy_frontend_status{service_name=~\"$service_name\"}, proxy)",
         "hide": 0,
         "includeAll": true,
@@ -8107,7 +8107,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"haproxy_server_bytes_in_total|haproxy_frontend_bytes_in_total\"}, server)",
         "hide": 2,
         "includeAll": true,
@@ -8135,7 +8135,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, environment)",
         "hide": 2,
         "includeAll": true,
@@ -8162,7 +8162,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"haproxy_server_status\"}, cluster)",
         "hide": 2,
         "includeAll": true,
@@ -8189,7 +8189,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, replication_set)",
         "hide": 2,
         "includeAll": true,
@@ -8216,7 +8216,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
         "hide": 2,
         "includeAll": true,
@@ -8243,7 +8243,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, node_type)",
         "hide": 2,
         "includeAll": true,
@@ -8270,7 +8270,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
         "hide": 2,
         "includeAll": true,
@@ -8297,7 +8297,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
         "hide": 2,
         "includeAll": true,
@@ -8325,7 +8325,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(haproxy_server_bytes_in_total{service_name=~\"$service_name\"}, node_name)",
         "hide": 2,
         "includeAll": false,
@@ -8353,7 +8353,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "query_result(haproxy_server_last_session_seconds{service_name=\"$service_name\"} > 0)",
         "hide": 2,
         "includeAll": true,
@@ -8381,7 +8381,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "query_result(haproxy_server_status{service_name=\"$service_name\",proxy=~\"$backend\"})",
         "hide": 2,
         "includeAll": true,

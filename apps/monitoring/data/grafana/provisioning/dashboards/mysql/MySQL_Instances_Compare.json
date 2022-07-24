@@ -237,7 +237,7 @@
       ],
       "targets": [
         {
-          "datasource": "Metrics",
+          "datasource": "Prometheus",
           "exemplar": false,
           "expr": "mysql_version_info{service_name=~\"$service_name\"}",
           "format": "table",
@@ -4437,7 +4437,7 @@
           "text": "auto",
           "value": "$__auto_interval_interval"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "hide": 0,
         "includeAll": false,
         "label": "Interval",
@@ -4498,7 +4498,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=~\"$node_name\"}, region)",
         "hide": 2,
         "includeAll": false,
@@ -4526,7 +4526,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{service_name=~\"$service_name\"}, node_name)",
         "hide": 2,
         "includeAll": true,
@@ -4554,7 +4554,7 @@
           "text": "ps-dev",
           "value": "ps-dev"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=~\"$node_name\"}, environment)",
         "hide": 2,
         "includeAll": false,
@@ -4581,7 +4581,7 @@
           "text": "ps-dev-cluster",
           "value": "ps-dev-cluster"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=~\"$node_name\"}, cluster)",
         "hide": 2,
         "includeAll": false,
@@ -4609,7 +4609,7 @@
           "text": "ps_8.0_3.142.150.215_1",
           "value": "ps_8.0_3.142.150.215_1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up, service_name)",
         "hide": 0,
         "includeAll": false,
@@ -4637,7 +4637,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=\"$node_name\"}, node_id)",
         "hide": 2,
         "includeAll": false,
@@ -4665,7 +4665,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=\"$node_name\"}, instance)",
         "hide": 2,
         "includeAll": false,
@@ -4692,7 +4692,7 @@
           "text": "/service_id/a9cecc72-2add-4c24-a47c-2dd2dec8f02c",
           "value": "/service_id/a9cecc72-2add-4c24-a47c-2dd2dec8f02c"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{service_name=~\"$service_name\"}, service_id)",
         "hide": 2,
         "includeAll": false,
@@ -4720,7 +4720,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=\"$node_name\"}, az)",
         "hide": 2,
         "includeAll": false,
@@ -4748,7 +4748,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=\"$node_name\"}, node_type)",
         "hide": 2,
         "includeAll": false,
@@ -4776,7 +4776,7 @@
           "text": "None",
           "value": ""
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{node_name=\"$node_name\"}, node_model)",
         "hide": 2,
         "includeAll": false,
@@ -4803,7 +4803,7 @@
           "text": "ps-repl1",
           "value": "ps-repl1"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_up{service_name=~\"$service_name\"}, replication_set)",
         "hide": 2,
         "includeAll": false,
@@ -4830,7 +4830,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(pg_stat_database_tup_fetched{service_name=~\"$service_name\",datname!~\"template.*|postgres\"},datname)",
         "hide": 2,
         "includeAll": true,
@@ -4857,7 +4857,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, service_type)",
         "hide": 2,
         "includeAll": true,
@@ -4884,7 +4884,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values(mysql_info_schema_user_statistics_connected_time_seconds_total{service_name=\"$service_name\"},user)",
         "hide": 2,
         "includeAll": true,
@@ -4911,7 +4911,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Metrics",
+        "datasource": "Prometheus",
         "definition": "label_values({__name__=~\"pg_up|mysql_up|mongodb_up|proxysql_mysql_status_active_transactions\"}, schema)",
         "hide": 2,
         "includeAll": true,
