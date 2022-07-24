@@ -10,7 +10,7 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
     healthcheck:
-      test: ["CMD", "curl", "-f", "https://localhost:8080/ping"]
+      test: ["CMD-SHELL", "wget -nv -t1 --spider 'http://localhost:8000/' || exit 1"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -45,7 +45,7 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
     healthcheck:
-      test: ["CMD", "curl", "-f", "https://localhost:9000/health"]
+      test: ["CMD-SHELL", "step ca health 2>/dev/null | grep \"^ok\" >/dev/null"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -94,7 +94,7 @@ services:
       - labtastic
   
   dns:
-    image: technitium/dns-server
+    image: ghcr.io/labtastic/dns-server
     restart: always
     logging:
       driver: "json-file"
