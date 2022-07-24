@@ -20,6 +20,7 @@ docker_compose_up() {
 
 docker_compose_up_all() {
   compose_files=$(generate_compose_files_list)
+  echo $compose_files
   env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic ${compose_files} up -d
 }
 
