@@ -64,8 +64,7 @@ docker_compose_start() {
 
 docker_compose_status() {
   compose_files=$(generate_compose_files_list)
-  compose_profiles=$(generate_compose_profiles)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile ${compose_profiles} ${compose_files} status
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic ${compose_files} status
 }
 
 docker_compose_logs() {
