@@ -1,5 +1,5 @@
 generate_compose_files_list() {
-  source .env
+  source .env.apps
 
   files=""
 
@@ -11,7 +11,7 @@ generate_compose_files_list() {
 }
 
 generate_compose_profiles() {
-  source .env
+  source .env.apps
 
   profiles=""
 

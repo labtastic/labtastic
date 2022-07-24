@@ -1,15 +1,15 @@
 setup_app() {
   app_name=$1
 
-  source .env
+  source .env.apps
 
   if printf '%s\0' "${ENABLED_APPS[@]}" | grep -Fxqz "$app_name"; then
     error "app already installed"
     exit 1
   fi
 
+  echo "ENABLED_APPS+=(\"$1\")" >> .env.apps
   echo "# $1 Vars" >> .env
-  echo "ENABLED_APPS+=(\"$1\")" >> .env
   cat "apps/$1/.env" >> .env
   echo "" >> .env
 

@@ -33,8 +33,8 @@ fi
 
 info "creating initial .env config"
 
-echo "### ENABLED APPS ###" > .env
-echo "ENABLED_APPS=()" >> .env
+echo "### ENABLED APPS ###" > .env.apps
+echo "ENABLED_APPS=()" >> .env.apps
 echo "### Global ENV Vars ###" >> .env
 echo "# dns base domain" >> .env
 echo "DOMAIN=\"changeme\"" >> .env

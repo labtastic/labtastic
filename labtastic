@@ -476,15 +476,15 @@ inspect_args() {
 setup_app() {
   app_name=$1
 
-  source .env
+  source .env.apps
 
   if printf '%s\0' "${ENABLED_APPS[@]}" | grep -Fxqz "$app_name"; then
     error "app already installed"
     exit 1
   fi
 
+  echo "ENABLED_APPS+=(\"$1\")" >> .env.apps
   echo "# $1 Vars" >> .env
-  echo "ENABLED_APPS+=(\"$1\")" >> .env
   cat "apps/$1/.env" >> .env
   echo "" >> .env
 
@@ -530,7 +530,7 @@ cyan_underlined() { print_in_color "\e[4;36m" "$*"; }
 
 # src/lib/docker.sh
 generate_compose_files_list() {
-  source .env
+  source .env.apps
 
   files=""
 
@@ -542,7 +542,7 @@ generate_compose_files_list() {
 }
 
 generate_compose_profiles() {
-  source .env
+  source .env.apps
 
   profiles=""
 
@@ -682,8 +682,8 @@ labtastic_init_command() {
 
   info "creating initial .env config"
 
-  echo "### ENABLED APPS ###" > .env
-  echo "ENABLED_APPS=()" >> .env
+  echo "### ENABLED APPS ###" > .env.apps
+  echo "ENABLED_APPS=()" >> .env.apps
   echo "### Global ENV Vars ###" >> .env
   echo "# dns base domain" >> .env
   echo "DOMAIN=\"changeme\"" >> .env
