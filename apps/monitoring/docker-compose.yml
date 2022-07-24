@@ -95,11 +95,6 @@ services:
       options: 
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wget -nv -t1 --spider 'http://localhost:3100/ready' || exit 1"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=loki"
