@@ -477,6 +477,7 @@ setup_app() {
   app_name=$1
 
   source .env.apps
+  source .env
 
   if printf '%s\0' "${ENABLED_APPS[@]}" | grep -Fxqz "$app_name"; then
     error "app already installed"
