@@ -555,11 +555,7 @@ setup_app() {
 
   NEW_APPS=""
   for app in ${ENABLED_APPS[@]}; do
-    if [[ $app -eq 1 ]]; then
-      NEW_APPS="\"$app\""
-    else
-      NEW_APPS="${NEW_APPS} \"$app\""
-    fi
+    NEW_APPS="${NEW_APPS} \"$app\""
   done
   echo "ENABLED_APPS=($NEW_APPS)" > .env.apps
   echo "# $1 Vars" >> .env
