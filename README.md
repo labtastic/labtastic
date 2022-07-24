@@ -60,3 +60,11 @@ This breaks the ability to provide DNS for services launched with Labtastic sinc
 
 ### Solution
 The solution is put your Comcast modem in bridge mode and then put your own router infront of it and point DNS to the labtastic server IP. Then you will need to change the DNS server settings to use either DoH or DoT to ensure that your selected recursive servers are used instead of still being intercepted by Comcast
+
+```mermaid
+graph TD;
+
+ISP-->ISP Modem;
+ISP Modem-->Non-ISP Router;
+Non-ISP Router-->Labtastic Server;
+```
