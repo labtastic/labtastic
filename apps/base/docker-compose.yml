@@ -93,7 +93,7 @@ services:
       - "traefik.http.routers.base-dns.entrypoints=web, websecure"
       - "traefik.http.routers.base-dns.tls=true"
       - "traefik.http.routers.base-dns.tls.certresolver=labtastic"
-      - "traefik.http.services.base-dns.loadbalancer.server.port=9000"
+      - "traefik.http.services.base-dns.loadbalancer.server.port=5380"
     ports:
       - "53:53/tcp"
       - "53:53/udp"

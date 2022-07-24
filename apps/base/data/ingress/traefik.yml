@@ -21,9 +21,9 @@ providers:
 certificatesResolvers:
   labtastic:
     acme:
-      email: "admin@labtastic.local"
+      email: "ingress@labtastic.local"
       storage: /etc/traefik/labtastic-ca.json
-      caServer: https://labtastic-ca:9000/directory
+      caServer: https://labtastic-ca:9000/acme/acme/directory
       tlsChallenge: {}
   
 api:
