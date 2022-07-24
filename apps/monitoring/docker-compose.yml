@@ -69,14 +69,16 @@ services:
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=prometheus"
       - "traefik.enable=true"
-      - "traefik.http.routers.monitoring-grafana.rule=Host(`prometheus.${DOMAIN}`)"
-      - "traefik.http.routers.monitoring-grafana.entrypoints=web, websecure"
-      - "traefik.http.routers.monitoring-grafana.tls=true"
-      - "traefik.http.routers.monitoring-grafana.tls.certresolver=labtastic"
-      - "traefik.http.services.monitoring-grafana.loadbalancer.server.port=9090"
+      - "traefik.http.routers.monitoring-prometheus.rule=Host(`prometheus.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-prometheus.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-prometheus.tls=true"
+      - "traefik.http.routers.monitoring-prometheus.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-prometheus.loadbalancer.server.port=9090"
     volumes:
       - "$APP_DATA/monitoring/prometheus/config/:/etc/prometheus/"
       - "$APP_DATA/monitoring/prometheus/data/:/var/lib/prometheus/"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/lib/docker:/var/lib/docker:ro"
     networks:
       - labtastic
   
@@ -101,11 +103,11 @@ services:
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=loki"
       - "traefik.enable=true"
-      - "traefik.http.routers.monitoring-grafana.rule=Host(`loki.${DOMAIN}`)"
-      - "traefik.http.routers.monitoring-grafana.entrypoints=web, websecure"
-      - "traefik.http.routers.monitoring-grafana.tls=true"
-      - "traefik.http.routers.monitoring-grafana.tls.certresolver=labtastic"
-      - "traefik.http.services.monitoring-grafana.loadbalancer.server.port=3100"
+      - "traefik.http.routers.monitoring-loki.rule=Host(`loki.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-loki.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-loki.tls=true"
+      - "traefik.http.routers.monitoring-loki.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-loki.loadbalancer.server.port=3100"
     volumes:
       - "$APP_DATA/monitoring/loki/config/:/etc/loki/"
       - "$APP_DATA/monitoring/loki/data/:/tmp/loki/chunks/"
@@ -145,6 +147,106 @@ services:
       - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    networks:
+      - labtastic
+  
+  node-exporter:
+    image: prom/node-exporter
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    profiles:
+      - monitoring
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    volumes:
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/:/rootfs:ro"
+    networks:
+      - labtastic
+    
+  alertmanager:
+    image: prom/alertmanager
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    profiles:
+      - monitoring
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=alertmanager"
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitoring-alertmanager.rule=Host(`alertmanager.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-alertmanager.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-alertmanager.tls=true"
+      - "traefik.http.routers.monitoring-alertmanager.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-alertmanager.loadbalancer.server.port=9093"
+    volumes:
+      - "$APP_DATA/monitoring/alertmanager/config/:/etc/alertmanager/"
+      - "$APP_DATA/monitoring/alertmanager/data/:/alertmanager/"
+    networks:
+      - labtastic
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    privileged: true
+    profiles:
+      - monitoring
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:ro"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker:/var/lib/docker:ro"
+      - "/cgroup:/cgroup:ro"
+    networks:
+      - labtastic
+  
+  pushgateway:
+    image: prom/pushgateway
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    profiles:
+      - monitoring
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=pushgateway"
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitoring-pushgateway.rule=Host(`pushgateway.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-pushgateway.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-pushgateway.tls=true"
+      - "traefik.http.routers.monitoring-pushgateway.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-pushgateway.loadbalancer.server.port=9091"
     networks:
       - labtastic
 
