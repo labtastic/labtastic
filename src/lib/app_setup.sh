@@ -13,6 +13,7 @@ setup_app() {
   for app in ${ENABLED_APPS[@]}; do
     NEW_APPS="${NEW_APPS} \"$app\""
   done
+  NEW_APPS="${NEW_APPS} \"$app_name\""
   echo "ENABLED_APPS=($NEW_APPS)" > .env.apps
   echo "# $1 Vars" >> .env
   cat "apps/$1/.env" >> .env
