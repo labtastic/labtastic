@@ -34,15 +34,17 @@ labtastic_usage() {
   echo
   # :command.usage_commands
   printf "Commands:\n"
-  echo "  init      Initialize Labtastic"
-  echo "  install   install and prepare an app"
-  echo "  start     start an app"
-  echo "  stop      stop an app"
-  echo "  up        start an app"
-  echo "  down      stop an app"
-  echo "  status    show status of all containers"
-  echo "  logs      tail logs of give app container"
-  echo "  update    update labtastic"
+  echo "  init       Initialize Labtastic"
+  echo "  install    install and prepare an app"
+  echo "  start      start an app"
+  echo "  stop       stop an app"
+  echo "  up         start an app"
+  echo "  down       stop an app"
+  echo "  down-all   stop all apps"
+  echo "  up-all     start all apps"
+  echo "  status     show status of all containers"
+  echo "  logs       tail logs of give app container"
+  echo "  update     update labtastic"
   echo
 
   if [[ -n $long_usage ]]; then
@@ -316,6 +318,72 @@ labtastic_down_usage() {
 }
 
 # :command.usage
+labtastic_down_all_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "labtastic down-all - stop all apps\n"
+    echo
+
+  else
+    printf "labtastic down-all - stop all apps\n"
+    echo
+
+  fi
+
+  printf "Usage:\n"
+  printf "  labtastic down-all\n"
+  printf "  labtastic down-all --help | -h\n"
+  echo
+
+  if [[ -n $long_usage ]]; then
+    printf "Options:\n"
+    # :command.usage_fixed_flags
+    echo "  --help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_examples
+    printf "Examples:\n"
+
+    printf "  labtastic down-all\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+labtastic_up_all_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "labtastic up-all - start all apps\n"
+    echo
+
+  else
+    printf "labtastic up-all - start all apps\n"
+    echo
+
+  fi
+
+  printf "Usage:\n"
+  printf "  labtastic up-all\n"
+  printf "  labtastic up-all --help | -h\n"
+  echo
+
+  if [[ -n $long_usage ]]; then
+    printf "Options:\n"
+    # :command.usage_fixed_flags
+    echo "  --help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_examples
+    printf "Examples:\n"
+
+    printf "  labtastic up-all\n"
+    echo
+
+  fi
+}
+
+# :command.usage
 labtastic_status_usage() {
   if [[ -n $long_usage ]]; then
     printf "labtastic status - show status of all containers\n"
@@ -542,56 +610,34 @@ generate_compose_files_list() {
   echo $files
 }
 
-generate_compose_profiles() {
-  source .env.apps
-
-  profiles=""
-
-  for app in ${!ENABLED_APPS[@]}; do
-    if [[ $app -eq 1 ]]; then
-      files="${ENABLED_APPS[$app]}"
-    else
-      files="${files},${ENABLED_APPS[$app]}"
-    fi
-  done
-
-  echo $profiles
-}
-
 docker_compose_setup() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" |  xargs ) docker compose --project-name labtastic --profile "$1-setup" ${compose_files} up -d
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" |  xargs ) docker compose --project-name labtastic --profile "$1-setup" -f apps/${1}/docker-compose.yml up -d
 }
 
 docker_compose_up() {
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml up -d
+}
+
+docker_compose_up_all() {
   compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} up -d
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic ${compose_files} up -d
 }
 
 docker_compose_down() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} down
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml down
 }
 
-docker_compose_stop_all() {
+docker_compose_down_all() {
   compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$app" ${compose_files} stop
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic ${compose_files} down
 }
 
 docker_compose_stop() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} stop
-}
-
-docker_compose_start_all() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$app" ${compose_files}l start
-
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml stop
 }
 
 docker_compose_start() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} start
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml start
 }
 
 docker_compose_status() {
@@ -601,7 +647,7 @@ docker_compose_status() {
 
 docker_compose_logs() {
   compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} logs -f "$2"
+  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic ${compose_files} logs -f "$1"
 }
 
 # src/lib/filters.sh
@@ -754,6 +800,18 @@ labtastic_down_command() {
 }
 
 # :command.function
+labtastic_down_all_command() {
+  # src/down_all_command.sh
+  docker_compose_down_all
+}
+
+# :command.function
+labtastic_up_all_command() {
+  # src/up_all_command.sh
+  docker_compose_up_all "${args[appname]}"
+}
+
+# :command.function
 labtastic_status_command() {
   # src/status_command.sh
   docker_compose_status
@@ -840,6 +898,20 @@ parse_requirements() {
     action="down"
     shift
     labtastic_down_parse_requirements "$@"
+    shift $#
+    ;;
+
+  down-all )
+    action="down-all"
+    shift
+    labtastic_down_all_parse_requirements "$@"
+    shift $#
+    ;;
+
+  up-all )
+    action="up-all"
+    shift
+    labtastic_up_all_parse_requirements "$@"
     shift $#
     ;;
 
@@ -1208,6 +1280,90 @@ labtastic_down_parse_requirements() {
 }
 
 # :command.parse_requirements
+labtastic_down_all_parse_requirements() {
+  # :command.fixed_flags_filter
+  case "${1:-}" in
+  --help | -h )
+    long_usage=yes
+    labtastic_down_all_usage
+    exit
+    ;;
+
+  esac
+  # :command.environment_variables_filter
+  # :command.dependencies_filter
+  # :command.command_filter
+  action="down-all"
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+    -?* )
+      printf "invalid option: %s\n" "$key"
+      exit 1
+      ;;
+
+    * )
+      # :command.parse_requirements_case
+      # :command.parse_requirements_case_simple
+      printf "invalid argument: %s\n" "$key"
+      exit 1
+      ;;
+
+    esac
+  done
+  # :command.required_args_filter
+  # :command.required_flags_filter
+  # :command.catch_all_filter
+  # :command.default_assignments
+  # :command.whitelist_filter
+  # :command.user_filter
+}
+
+# :command.parse_requirements
+labtastic_up_all_parse_requirements() {
+  # :command.fixed_flags_filter
+  case "${1:-}" in
+  --help | -h )
+    long_usage=yes
+    labtastic_up_all_usage
+    exit
+    ;;
+
+  esac
+  # :command.environment_variables_filter
+  # :command.dependencies_filter
+  # :command.command_filter
+  action="up-all"
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+    -?* )
+      printf "invalid option: %s\n" "$key"
+      exit 1
+      ;;
+
+    * )
+      # :command.parse_requirements_case
+      # :command.parse_requirements_case_simple
+      printf "invalid argument: %s\n" "$key"
+      exit 1
+      ;;
+
+    esac
+  done
+  # :command.required_args_filter
+  # :command.required_flags_filter
+  # :command.catch_all_filter
+  # :command.default_assignments
+  # :command.whitelist_filter
+  # :command.user_filter
+}
+
+# :command.parse_requirements
 labtastic_status_parse_requirements() {
   # :command.fixed_flags_filter
   case "${1:-}" in
@@ -1414,6 +1570,22 @@ run() {
       labtastic_down_usage
     else
       labtastic_down_command
+    fi
+
+  elif [[ $action == "down-all" ]]; then
+    if [[ ${args[--help]:-} ]]; then
+      long_usage=yes
+      labtastic_down_all_usage
+    else
+      labtastic_down_all_command
+    fi
+
+  elif [[ $action == "up-all" ]]; then
+    if [[ ${args[--help]:-} ]]; then
+      long_usage=yes
+      labtastic_up_all_usage
+    else
+      labtastic_up_all_command
     fi
 
   elif [[ $action == "status" ]]; then

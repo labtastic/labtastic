@@ -28,8 +28,6 @@ services:
       - "6379:6379" # Redis TCP Entrypoint
       - "3306:3306" # MySQL TCP Entrypoint
       - "5432:5432" # PostgreSQL TCP Entrypoint
-    profiles:
-      - base
     depends_on:
       - labtastic-ca
     networks:
@@ -59,9 +57,6 @@ services:
       DOCKER_STEPCA_INIT_PASSWORD: ${BASE_CA_INIT_PASSWORD}
     volumes:
       - "$APP_DATA/base/ca/:/home/step/"
-    profiles:
-      - base
-      - base-setup
     networks:
       - labtastic
     labels:
@@ -90,8 +85,6 @@ services:
       WATCHTOWER_HTTP_API_METRICS: "${BASE_WATCHTOWER_API_METRICS:-true}"
       WATCHTOWER_TIMEOUT: "${BASE_WATCHTOWER_TIMEOUT:-60s}"
       WATCHTOWER_CLEANUP: "${BASE_WATCHTOWER_CLEANUP:-true}"
-    profiles:
-      - base
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
@@ -114,9 +107,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
-    profiles:
-      - base
-      - base-setup
     networks:
       - labtastic
     environment:
@@ -146,8 +136,6 @@ services:
       - "53:53/udp"
     volumes:
       - "$APP_DATA/base/dns/:/etc/dns/config/"
-
-
 
 networks:
   labtastic:

@@ -14,9 +14,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles:
-      - postgresql
-      - postgresql-setup
     environment:
       POSTGRES_PASSWORD: "${POSTGRESQL_POSTGRES_PASSWORD}"
       POSTGRES_USER: "${POSTGRESQL_POSTGRES_USER}"
@@ -43,8 +40,6 @@ services:
       options: 
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
-    profiles:
-      - postgresql
     environment:
       DATA_SOURCE_URI: "postgresql?sslmode=disable"
       DATA_SOURCE_USER: "${POSTGRESQL_POSTGRES_USER}"

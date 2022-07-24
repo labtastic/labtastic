@@ -9,8 +9,6 @@ services:
       options: 
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
-    profiles:
-      - monitoring
     environment:
       GF_FEATURE_TOGGLES_ENABLE: "${MONITORING_GF_FEATURE_TOGGLES_ENABLE}"
       GF_SERVER_ROOT_URL: "grafana.${DOMAIN}"
@@ -63,8 +61,6 @@ services:
       retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    profiles:
-      - monitoring
     environment:
       - name=value
     labels:
@@ -99,8 +95,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles:
-      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=loki"
@@ -128,8 +122,6 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
     command: --config.file=/etc/promtail/config.yaml
-    profiles:
-      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=promtail"
@@ -148,8 +140,6 @@ services:
       options: 
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
-    profiles:
-      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
     networks:
@@ -168,8 +158,6 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    profiles:
-      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=node"
@@ -191,8 +179,6 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
-    profiles:
-      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=alertmanager"
@@ -219,8 +205,6 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
     privileged: true
-    profiles:
-      - monitoring
     devices:
       - /dev/kmsg:/dev/kmsg
     labels:
@@ -244,8 +228,6 @@ services:
       options: 
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
         max-size: "100m"
-    profiles:
-      - monitoring
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "prometheus-job=pushgateway"
