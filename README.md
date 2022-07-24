@@ -63,8 +63,7 @@ The solution is put your Comcast modem in bridge mode and then put your own rout
 
 ```mermaid
 graph TD;
-
-ISP-->"ISP Modem";
-"ISP Modem"-->"Non-ISP Router";
-"Non-ISP Router"-->"Labtastic Server";
+  ISP-->"ISP Modem";
+  "ISP Modem"-->"Non-ISP Router";
+  "Non-ISP Router"-->"Labtastic Server";
 ```
