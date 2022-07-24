@@ -8,4 +8,4 @@ fi
 docker_compose_setup "${args[appname]}"
 
 info "setup for ${args[appname]} app finished!"
-info "please run './labtastic app ${args[appname]} --start' to finish installation"
+info "please run './labtastic up ${args[appname]}' to finish installation"
