@@ -16,7 +16,7 @@ services:
       retries: 5
     environment:
       GF_FEATURE_TOGGLES_ENABLE: "${MONITORING_GF_FEATURE_TOGGLES_ENABLE}"
-      GF_SERVER_ROOT_URL: "grafana.${DOMAIN}"
+      GF_SERVER_ROOT_URL: "https://grafana.${DOMAIN}"
       GF_DATABASE_NAME: "${MONITORING_GF_DATABASE_NAME}"
       GF_DATABASE_USER: "${MONITORING_GF_DATABASE_USER}"
       GF_DATABASE_PASSWORD: "${MONITORING_GF_DATABASE_PASSWORD}"
@@ -26,6 +26,7 @@ services:
       GF_DATABASE_MAX_OPEN_CONN: "${MONITORING_GF_DATABASE_MAX_OPEN_CONN}"
       GF_SESSION_PROVIDER: "${MONITORING_GF_SESSION_PROVIDER}"
       GF_SESSION_PROVIDER_CONFIG: "${MONITORING_GF_DATABASE_USER}:${MONITORING_GF_DATABASE_PASSWORD}@tcp(${MONITORING_GF_DATABASE_HOST})/${MONITORING_GF_DATABASE_NAME}?allowNativePasswords=true"
+      GF_INSTALL_PLUGINS: "${MONITORING_GF_INSTALL_PLUGINS}"
       GF_RENDERING_SERVER_URL: "http://grafana-renderer:8081/render"
       GF_RENDERING_CALLBACK_URL: "http://grafana:3000/"
     labels:
@@ -41,6 +42,7 @@ services:
       - "traefik.http.services.monitoring-grafana.loadbalancer.server.port=3000"
     volumes:
       - "$APP_DATA/monitoring/grafana/provisioning/:/etc/grafana/provisioning/"
+      - "$APP_DATA/monitoring/grafana/data/:/var/lib/grafana/"
     networks:
       - labtastic
     depends_on:
