@@ -2,27 +2,151 @@ version: '3.7'
 
 services:
   grafana:
-    image: grafana
+    image: grafana/grafana
     restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
     profiles:
       - monitoring
+    environment:
+      GF_FEATURE_TOGGLES_ENABLE: "${MONITORING_GF_FEATURE_TOGGLES_ENABLE}"
+      GF_SERVER_ROOT_URL: "grafana.${DOMAIN}"
+      GF_DATABASE_NAME: "${MONITORING_GF_DATABASE_NAME}"
+      GF_DATABASE_USER: "${MONITORING_GF_DATABASE_USER}"
+      GF_DATABASE_PASSWORD: "${MONITORING_GF_DATABASE_PASSWORD}"
+      GF_DATABASE_TYPE: "${MONITORING_GF_DATABASE_TYPE}"
+      GF_DATABASE_HOST: "${MONITORING_GF_DATABASE_HOST}"
+      GF_DATABASE_SSL_MODE: "${MONITORING_GF_DATABASE_SSL_MODE}"
+      GF_DATABASE_MAX_OPEN_CONN: "${MONITORING_GF_DATABASE_MAX_OPEN_CONN}"
+      GF_SESSION_PROVIDER: "${MONITORING_GF_SESSION_PROVIDER}"
+      GF_SESSION_PROVIDER_CONFIG: "${MONITORING_GF_DATABASE_USER}:${MONITORING_GF_DATABASE_PASSWORD}@tcp(${MONITORING_GF_DATABASE_HOST})/${MONITORING_GF_DATABASE_NAME}?allowNativePasswords=true"
+      GF_RENDERING_SERVER_URL: "http://grafana-renderer:8081/render"
+      GF_RENDERING_CALLBACK_URL: "http://grafana:3000/"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=grafana"
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitoring-grafana.rule=Host(`grafana.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-grafana.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-grafana.tls=true"
+      - "traefik.http.routers.monitoring-grafana.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-grafana.loadbalancer.server.port=3000"
+    volumes:
+      - "$APP_DATA/monitoring/grafana/provisioning/:/etc/grafana/provisioning/"
     networks:
       - labtastic
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+    
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - monitoring
     environment:
-      Test: Test
+      - name=value
     labels:
-      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=prometheus"
       - "traefik.enable=true"
-      - "traefik.tcp.routers.monitoring-grafana.rule=HostSNI(`grafana.${DOMAIN}`)"
-      - "traefik.tcp.routers.monitoring-grafana.entrypoints=web, websecure"
-      - "traefik.tcp.routers.monitoring-grafana.tls=true"
-      - "traefik.tcp.routers.monitoring-grafana.tls.certresolver=labtastic"
-      - "traefik.tcp.services.monitoring-grafana.loadbalancer.server.port=3000"
+      - "traefik.http.routers.monitoring-grafana.rule=Host(`prometheus.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-grafana.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-grafana.tls=true"
+      - "traefik.http.routers.monitoring-grafana.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-grafana.loadbalancer.server.port=9090"
     volumes:
-      - "$APP_DATA/monitoring/grafana:/etc/dns/config"
-
-
-
+      - "$APP_DATA/monitoring/prometheus/config/:/etc/prometheus/"
+      - "$APP_DATA/monitoring/prometheus/data/:/var/lib/prometheus/"
+    networks:
+      - labtastic
+  
+  loki:
+    image: grafana/loki
+    restart: always
+    command: -config.file=/etc/loki/local-config.yaml
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - monitoring
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=loki"
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitoring-grafana.rule=Host(`loki.${DOMAIN}`)"
+      - "traefik.http.routers.monitoring-grafana.entrypoints=web, websecure"
+      - "traefik.http.routers.monitoring-grafana.tls=true"
+      - "traefik.http.routers.monitoring-grafana.tls.certresolver=labtastic"
+      - "traefik.http.services.monitoring-grafana.loadbalancer.server.port=3100"
+    volumes:
+      - "$APP_DATA/monitoring/loki/config/:/etc/loki/"
+      - "$APP_DATA/monitoring/loki/data/:/tmp/loki/chunks/"
+      - "$APP_DATA/monitoring/loki/rules/:/tmp/loki/rules/"
+    networks:
+      - labtastic
+  
+  promtail:
+    image: grafana/promtail
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    command: --config.file=/etc/promtail/config.yaml
+    profiles:
+      - monitoring
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    volumes:
+      - "$APP_DATA/monitoring/promtail/:/etc/promtail/"
+      - "/var/log/:/var/log/"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+    networks:
+      - labtastic
+    
+  grafana-renderer:
+    image: grafana/grafana-image-renderer
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    profiles:
+      - monitoring
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    networks:
+      - labtastic
 
 networks:
   labtastic:

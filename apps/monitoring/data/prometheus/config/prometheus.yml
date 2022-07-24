@@ -1,0 +1,37 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 15s
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+          - "alertmanager:9093"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'grafana'
+    dns_sd_configs:
+      - names:
+        - 'grafana'
+        type: 'A'
+        port: 3000
+        refresh_interval: 10s
+  - job_name: 'postgresql'
+    dns_sd_configs:
+      - names:
+        - 'postgresql-exporter'
+        type: 'A'
+        port: 9104
+        refresh_interval: 10s
+  - job_name: 'loki'
+    dns_sd_configs:
+      - names:
+        - 'loki'
+        type: 'A'
+        port: 3100
+        refresh_interval: 10s

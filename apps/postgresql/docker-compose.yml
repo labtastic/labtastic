@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+  postgresql:
+    image: postgresql:14
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - postgresql
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRESQL_POSTGRES_PASSWORD}"
+      POSTGRES_USER: "${POSTGRESQL_POSTGRES_USER}"
+      POSTGRES_DB: "${POSTGRESQL_POSTGRES_DB}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=postgresql"
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.postgresql.entrypoints=postgresql"
+      - "traefik.tcp.services.postgresql.loadbalancer.server.port=5432"
+    volumes:
+      - "${APP_DATA}/postgresql/data/:/var/lib/postgresql/data/"
+      - "${APP_DATA}/postgresql/init-scripts/:/docker-entrypoint-initdb.d/"
+    networks:
+      - labtastic
+  
+  postgresql-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    profiles:
+      - postgresql
+    environment:
+      DATA_SOURCE_URI: "postgresql?sslmode=disable"
+      DATA_SOURCE_USER: "${POSTGRESQL_POSTGRES_USER}"
+      DATA_SOURCE_PASS: "${POSTGRESQL_POSTGRES_PASSWORD}"
+      PG_EXPORTER_AUTO_DISCOVER_DATABASES: "${POSTGRESQL_PG_EXPORTER_AUTO_DISCOVER_DATABASES}"
+      PG_EXPORTER_EXCLUDE_DATABASES: "${POSTGRESQL_PG_EXPORTER_EXCLUDE_DATABASES}"
+      PG_EXPORTER_INCLUDE_DATABASES: "${POSTGRESQL_PG_EXPORTER_INCLUDE_DATABASES}"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    networks:
+      - labtastic
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+networks:
+  labtastic:
+    external: true
