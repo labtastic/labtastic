@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  grafana:
+    image: grafana
+    restart: always
+    profiles:
+      - monitoring
+    networks:
+      - labtastic
+    environment:
+      Test: Test
+    labels:
+      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.monitoring-grafana.rule=HostSNI(`grafana.${DOMAIN}`)"
+      - "traefik.tcp.routers.monitoring-grafana.entrypoints=web, websecure"
+      - "traefik.tcp.routers.monitoring-grafana.tls=true"
+      - "traefik.tcp.routers.monitoring-grafana.tls.certresolver=labtastic"
+      - "traefik.tcp.services.monitoring-grafana.loadbalancer.server.port=3000"
+    volumes:
+      - "$APP_DATA/monitoring/grafana:/etc/dns/config"
+
+
+
+
+networks:
+  labtastic:
+    external: true

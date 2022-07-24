@@ -1,9 +1,15 @@
-version: '3'
+version: '3.7'
 
 services:
   ingress:
     image: traefik
     restart: always
+    healthcheck:
+      test: ["curl", "-f", "https://localhost:8080/ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     environment:
       LEGO_CA_CERTIFICATES: "/root_ca.crt"
     volumes:
@@ -27,7 +33,7 @@ services:
     image: smallstep/step-ca
     restart: always
     healthcheck:
-      test: ["curl", "https://localhost:9000/health"]
+      test: ["curl", "-f", "https://localhost:9000/health"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -58,6 +64,10 @@ services:
     restart: always
     environment:
       WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_HTTP_API_TOKEN: "${BASE_WATCHTOWER_API_TOKEN:-labtastic}"
+      WATCHTOWER_HTTP_API_METRICS: "${BASE_WATCHTOWER_API_METRICS:-true}"
+      WATCHTOWER_TIMEOUT: "${BASE_WATCHTOWER_TIMEOUT:-60s}"
+      WATCHTOWER_CLEANUP: "${BASE_WATCHTOWER_CLEANUP:-true}"
     profiles:
       - base
     volumes:
@@ -70,6 +80,12 @@ services:
   dns:
     image: technitium/dns-server
     restart: always
+    healthcheck:
+      test: ["curl", "-f", "https://localhost:5380/api/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     profiles:
       - base
       - base-setup
