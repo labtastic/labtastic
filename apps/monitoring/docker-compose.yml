@@ -56,6 +56,7 @@ services:
   prometheus:
     image: prom/prometheus
     restart: always
+    user: root
     logging:
       driver: "json-file"
       options: 
