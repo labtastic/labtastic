@@ -1,0 +1,193 @@
+version: '3.7'
+
+services:
+  qbittorrent:
+    image: dyonr/qbittorrentvpn
+    privileged: true
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=qbittorrent"
+      - "traefik.enable=true"
+      - "traefik.http.routers.media-download-qbittorrent.rule=Host(`qbittorrent.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-qbittorrent.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-qbittorrent.service=media-download-qbittorrent"
+      - "traefik.http.routers.media-download-qbittorrent.tls=true"
+      - "traefik.http.routers.media-download-qbittorrent.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-qbittorrent.loadbalancer.server.port=8080"
+      - "traefik.http.routers.media-download-jackett.rule=Host(`jackett.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-jackett.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-jackett.service=media-download-jackett"
+      - "traefik.http.routers.media-download-jackett.tls=true"
+      - "traefik.http.routers.media-download-jackett.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-jackett.loadbalancer.server.port=9117"
+    environment:
+      DISABLE_IPV6: "${MEDIA_DOWNLOAD_DISABLE_IPV6:-0}"
+      VPN_ENABLED: "yes"
+      VPN_TYPE: "${MEDIA_DOWNLOAD_VPN_TYPE}"
+      LAN_NETWORK: "${MEDIA_DOWNLOAD_LAN_NETWORK}"
+      PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
+      PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
+      NAME_SERVERS: "${MEDIA_DOWNLOAD_NAME_SERVERS:-1.1.1.1,8.8.8.8}"
+      ADDITIONAL_PORTS: "${MEDIA_DOWNLOAD_ADDITIONAL_PORTS:-9117}"
+    volumes:
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
+      - "${APP_DATA}/media-download/qbittorrent/:/config/"
+    networks:
+      - labtastic
+  
+  jackett:
+    image: linuxserver/jackett
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    volumes:
+      - "${APP_DATA}/media-download/jackett/:/config/"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+    network_mode: service:qbittorrent
+    networks:
+      - labtastic
+
+  radarr:
+    image: linuxserver/radarr
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    environment:
+      PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
+      PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
+      TZ: "${MEDIA_DOWNLOAD_TZ}"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=radarr"
+      - "traefik.enable=true"
+      - "traefik.http.routers.media-download-radarr.rule=Host(`radarr.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-radarr.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-radarr.tls=true"
+      - "traefik.http.routers.media-download-radarr.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-radarr.loadbalancer.server.port=7878"
+      - "traefik.http.middlewares.media-download-radarr.headers.SSLRedirect=true"
+    volumes:
+      - "${APP_DATA}/media-download/radarr/:/config/"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/${MEDIA_DOWNLOAD_MOVIE_DIR_NAME}/:/movies"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
+    networks:
+      - labtastic
+    depends_on:
+      - jackett
+      - qbittorrent
+  
+  sonarr:
+    image: linuxserver/sonarr
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    volumes:
+      - "${APP_DATA}/media-download/sonarr/:/config/"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/${MEDIA_DOWNLOAD_TV_SHOWS_DIR_NAME}/:/tv-shows"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/anime/:/anime"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
+    environment:
+      PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
+      PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
+      TZ: "${MEDIA_DOWNLOAD_TZ}"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=sonarr"
+      - "traefik.enable=true"
+      - "traefik.http.routers.media-download-sonarr.rule=Host(`sonarr.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-sonarr.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-sonarr.tls=true"
+      - "traefik.http.routers.media-download-sonarr.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.middlewares.media-download-sonarr.headers.SSLRedirect=true"
+    networks:
+      - labtastic
+    depends_on:
+      - jackett
+      - qbittorrent
+  
+  lidarr:
+    image: linuxserver/lidarr
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    volumes:
+      - "${APP_DATA}/media-download/lidarr/:/config/"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/${MEDIA_DOWNLOAD_MUSIC_DIR_NAME}/:/music"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
+    environment:
+      PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
+      PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
+      TZ: "${MEDIA_DOWNLOAD_TZ}"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=lidarr"
+      - "traefik.enable=true"
+      - "traefik.http.routers.media-download-lidarr.rule=Host(`lidarr.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-lidarr.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-lidarr.tls=true"
+      - "traefik.http.routers.media-download-lidarr.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-lidarr.loadbalancer.server.port=8686"
+      - "traefik.http.middlewares.media-download-lidarr.headers.SSLRedirect=true"
+    networks:
+      - labtastic
+    depends_on:
+      - jackett
+      - qbittorrent
+  
+  ombi:
+    image: linuxserver/ombi
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    environment:
+      PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
+      PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
+      TZ: "${MEDIA_DOWNLOAD_TZ}"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=ombi"
+      - "traefik.enable=true"
+      - "traefik.http.routers.media-download-ombi.rule=Host(`ombi.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-ombi.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-ombi.tls=true"
+      - "traefik.http.routers.media-download-ombi.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-ombi.loadbalancer.server.port=3579"
+      - "traefik.http.middlewares.media-download-ombi.headers.SSLRedirect=true"
+    volumes:
+      - "${APP_DATA}/media-download/ombi/:/config/"
+    networks:
+      - labtastic
+
+networks:
+  labtastic:
+    external: true

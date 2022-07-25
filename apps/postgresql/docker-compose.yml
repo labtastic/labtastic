@@ -23,7 +23,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=postgresql"
-      - "traefik.enable=true"
+      - "traefik.enable=false"
       - "traefik.tcp.routers.postgresql.rule=HostSNI(`postgresql.${DOMAIN}`)"
       - "traefik.tcp.routers.postgresql.entrypoints=postgresql"
       - "traefik.tcp.services.postgresql.loadbalancer.server.port=5432"
