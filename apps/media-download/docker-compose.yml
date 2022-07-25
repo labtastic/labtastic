@@ -57,6 +57,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
     network_mode: service:qbittorrent
+    networks:
+      - labtastic
 
   radarr:
     image: linuxserver/radarr
