@@ -22,15 +22,13 @@ services:
       - "traefik.http.routers.media-download-qbittorrent.tls=true"
       - "traefik.http.routers.media-download-qbittorrent.tls.certresolver=labtastic"
       - "traefik.http.services.media-download-qbittorrent.loadbalancer.server.port=8080"
-      # - "traefik.http.routers.media-download-jackettt.rule=Host(`jackettt.${DOMAIN}`)"
-      # - "traefik.http.routers.media-download-jackettt.entrypoints=web, websecure"
-      # - "traefik.http.routers.media-download-jackettt.tls=true"
-      # - "traefik.http.routers.media-download-jackettt.tls.certresolver=labtastic"
-      # - "traefik.http.services.media-download-jackettt.loadbalancer.server.port=9117"
-      # - "traefik.http.middlewares.media-download-jackettt.headers.SSLRedirect=true"
+      - "traefik.http.routers.media-download-jackettt.rule=Host(`jackettt.${DOMAIN}`)"
+      - "traefik.http.routers.media-download-jackettt.entrypoints=web, websecure"
+      - "traefik.http.routers.media-download-jackettt.tls=true"
+      - "traefik.http.routers.media-download-jackettt.tls.certresolver=labtastic"
+      - "traefik.http.services.media-download-jackettt.loadbalancer.server.port=9117"
+      - "traefik.http.middlewares.media-download-jackettt.headers.SSLRedirect=true"
       - "traefik.http.middlewares.media-download-qbittorrent.headers.SSLRedirect=true"
-    ports:
-      - '9117:9117'
     environment:
       DISABLE_IPV6: "${MEDIA_DOWNLOAD_DISABLE_IPV6:-0}"
       VPN_ENABLED: "yes"
@@ -39,6 +37,7 @@ services:
       PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
       PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
       NAME_SERVERS: "${MEDIA_DOWNLOAD_NAME_SERVERS:-1.1.1.1,8.8.8.8}"
+      ADDITIONAL_PORTS: "${MEDIA_DOWNLOAD_ADDITIONAL_PORTS:-9117}"
     volumes:
       - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
       - "${APP_DATA}/media-download/qbittorrent/:/config/"
