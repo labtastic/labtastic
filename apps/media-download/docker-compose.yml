@@ -25,6 +25,8 @@ services:
       - "traefik.http.routers.media-download-jackettt.tls=true"
       - "traefik.http.routers.media-download-jackettt.tls.certresolver=labtastic"
       - "traefik.http.services.media-download-jackettt.loadbalancer.server.port=9117"
+      - "traefik.http.middlewares.media-download-jackettt.headers.SSLRedirect=true"
+      - "traefik.http.middlewares.media-download-qbittorrent.headers.SSLRedirect=true"
     environment:
       DISABLE_IPV6: "${MEDIA_DOWNLOAD_DISABLE_IPV6:-0}"
       VPN_ENABLED: "yes"
@@ -32,9 +34,10 @@ services:
       LAN_NETWORK: "${MEDIA_DOWNLOAD_LAN_NETWORK}"
       PUID: "${MEDIA_DOWNLOAD_UID:-1000}"
       PGID: "${MEDIA_DOWNLOAD_GID:-1000}"
+      NAME_SERVERS: "${MEDIA_DOWNLOAD_NAME_SERVERS:-1.1.1.1,8.8.8.8}"
     volumes:
       - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
-      - "${APP_DATA}/media-download/qbittorrent/:/config/"
+      - "${APP_DATA}/media-download/r   /:/config/"
     networks:
       - labtastic
   
@@ -74,6 +77,7 @@ services:
       - "traefik.http.routers.media-download-radarr.tls=true"
       - "traefik.http.routers.media-download-radarr.tls.certresolver=labtastic"
       - "traefik.http.services.media-download-radarr.loadbalancer.server.port=7878"
+      - "traefik.http.middlewares.media-download-radarr.headers.SSLRedirect=true"
     volumes:
       - "${APP_DATA}/media-download/radarr/:/config/"
       - "${MEDIA_DOWNLOAD_BASE_DIR}/${MEDIA_DOWNLOAD_MOVIE_DIR_NAME}/:/movies"
@@ -111,6 +115,7 @@ services:
       - "traefik.http.routers.media-download-sonarr.tls=true"
       - "traefik.http.routers.media-download-sonarr.tls.certresolver=labtastic"
       - "traefik.http.services.media-download-sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.middlewares.media-download-sonarr.headers.SSLRedirect=true"
     networks:
       - labtastic
     depends_on:
@@ -143,6 +148,7 @@ services:
       - "traefik.http.routers.media-download-lidarr.tls=true"
       - "traefik.http.routers.media-download-lidarr.tls.certresolver=labtastic"
       - "traefik.http.services.media-download-lidarr.loadbalancer.server.port=8686"
+      - "traefik.http.middlewares.media-download-lidarr.headers.SSLRedirect=true"
     networks:
       - labtastic
     depends_on:
@@ -171,6 +177,7 @@ services:
       - "traefik.http.routers.media-download-ombi.tls=true"
       - "traefik.http.routers.media-download-ombi.tls.certresolver=labtastic"
       - "traefik.http.services.media-download-ombi.loadbalancer.server.port=3579"
+      - "traefik.http.middlewares.media-download-ombi.headers.SSLRedirect=true"
     volumes:
       - "${APP_DATA}/media-download/ombi/:/config/"
     networks:
