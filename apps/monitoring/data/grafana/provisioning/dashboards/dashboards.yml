@@ -1,44 +1,8 @@
 apiVersion: 1
 
-providers:
- - name: 'Alerts'
-   folder: 'Alerts'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/alerts
-
- - name: 'PostgreSQL'
-   folder: 'PostgreSQL'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/postgresql
-
- - name: 'MySQL'
-   folder: 'MySQL'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/mysql
-
- - name: 'OS'
-   folder: 'OS'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/node
-
- - name: 'MongoDB'
-   folder: 'MongoDB'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/mongodb
-
- - name: 'Docker'
-   folder: 'Docker'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/docker
-
- - name: 'Labtastic'
-   folder: 'Labtastic'
-   type: file
-   options:
-     path: /etc/grafana/provisioning/dashboards/labtastic
+providers: []
+#  - name: 'Alerts'
+#    folder: 'Alerts'
+#    type: file
+#    options:
+#      path: /etc/grafana/provisioning/dashboards/alerts
