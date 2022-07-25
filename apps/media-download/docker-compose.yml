@@ -39,7 +39,7 @@ services:
       NAME_SERVERS: "${MEDIA_DOWNLOAD_NAME_SERVERS:-1.1.1.1,8.8.8.8}"
     volumes:
       - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
-      - "${APP_DATA}/media-download/r   /:/config/"
+      - "${APP_DATA}/media-download/qbittorrent/:/config/"
     networks:
       - labtastic
   
