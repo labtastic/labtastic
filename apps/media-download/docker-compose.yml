@@ -29,6 +29,9 @@ services:
       - "traefik.http.services.media-download-jackettt.loadbalancer.server.port=9117"
       - "traefik.http.middlewares.media-download-jackettt.headers.SSLRedirect=true"
       - "traefik.http.middlewares.media-download-qbittorrent.headers.SSLRedirect=true"
+    expose:
+      - 8080
+      - 9117
     environment:
       DISABLE_IPV6: "${MEDIA_DOWNLOAD_DISABLE_IPV6:-0}"
       VPN_ENABLED: "yes"
