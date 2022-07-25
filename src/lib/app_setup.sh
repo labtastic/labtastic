@@ -2,13 +2,19 @@ setup_app() {
   app_name=$1
 
   source .env.apps
+  source .env
 
   if printf '%s\0' "${ENABLED_APPS[@]}" | grep -Fxqz "$app_name"; then
     error "app already installed"
-    exit 1
+    exit 1    
   fi
 
-  echo "ENABLED_APPS+=(\"$1\")" >> .env.apps
+  NEW_APPS=""
+  for app in ${ENABLED_APPS[@]}; do
+    NEW_APPS="${NEW_APPS} \"$app\""
+  done
+  NEW_APPS="${NEW_APPS} \"$app_name\""
+  echo "ENABLED_APPS=($NEW_APPS)" > .env.apps
   echo "# $1 Vars" >> .env
   cat "apps/$1/.env" >> .env
   echo "" >> .env

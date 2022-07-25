@@ -95,6 +95,30 @@ commands:
 
   environment_variables: []
 
+- name: down-all
+  help: stop all apps
+
+  args: []
+  
+  flags: []
+      
+  examples:
+  - labtastic down-all
+
+  environment_variables: []
+
+- name: up-all
+  help: start all apps
+
+  args: []
+  
+  flags: []
+      
+  examples:
+  - labtastic up-all
+
+  environment_variables: []
+
 - name: status
   help: show status of all containers
 

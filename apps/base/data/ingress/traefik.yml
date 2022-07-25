@@ -9,6 +9,12 @@ entryPoints:
     address: ":443"
     http:
       certResolver: labtastic
+  postgresql:
+    address: ":5432"
+  mysql:
+    address: ":3306"
+  redis:
+    address: ":6379"
 
 providers:
   docker:

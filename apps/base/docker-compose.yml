@@ -4,8 +4,13 @@ services:
   ingress:
     image: traefik
     restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
     healthcheck:
-      test: ["curl", "-f", "https://localhost:8080/ping"]
+      test: ["CMD-SHELL", "wget -nv -t1 --spider 'http://localhost:8080/' || exit 1"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -14,26 +19,33 @@ services:
       LEGO_CA_CERTIFICATES: "/root_ca.crt"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "${APP_DATA}/base/ingress:/etc/traefik"
+      - "${APP_DATA}/base/ingress/:/etc/traefik/"
       - "${APP_DATA}/base/ca/certs/root_ca.crt:/root_ca.crt:ro"
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    profiles:
-      - base
+      - "80:80" # web Entrypoint
+      - "443:443" # websecure Entrypoint
+      - "8080:8080" # Traefik Dashboard
+      - "6379:6379" # Redis TCP Entrypoint
+      - "3306:3306" # MySQL TCP Entrypoint
+      - "5432:5432" # PostgreSQL TCP Entrypoint
     depends_on:
       - labtastic-ca
     networks:
       - labtastic
     labels:
-      - com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=traefik"
 
   labtastic-ca:
     image: smallstep/step-ca
     restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
     healthcheck:
-      test: ["curl", "-f", "https://localhost:9000/health"]
+      test: ["CMD-SHELL", "step ca health 2>/dev/null | grep \"^ok\" >/dev/null"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -44,14 +56,14 @@ services:
       DOCKER_STEPCA_INIT_SSH: "yes"
       DOCKER_STEPCA_INIT_PASSWORD: ${BASE_CA_INIT_PASSWORD}
     volumes:
-      - "$APP_DATA/base/ca:/home/step"
-    profiles:
-      - base
-      - base-setup
+      - "$APP_DATA/base/ca/:/home/step/"
     networks:
       - labtastic
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=labtastic-ca"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=ca"
       - "traefik.enable=true"
       - "traefik.tcp.routers.base-ca.rule=HostSNI(`ca.${DOMAIN}`)"
       - "traefik.tcp.routers.base-ca.entrypoints=web, websecure"
@@ -62,33 +74,39 @@ services:
   watchtower:
     image: containrrr/watchtower
     restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
     environment:
       WATCHTOWER_LABEL_ENABLE: "true"
       WATCHTOWER_HTTP_API_TOKEN: "${BASE_WATCHTOWER_API_TOKEN:-labtastic}"
       WATCHTOWER_HTTP_API_METRICS: "${BASE_WATCHTOWER_API_METRICS:-true}"
       WATCHTOWER_TIMEOUT: "${BASE_WATCHTOWER_TIMEOUT:-60s}"
       WATCHTOWER_CLEANUP: "${BASE_WATCHTOWER_CLEANUP:-true}"
-    profiles:
-      - base
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=watchtower"
     networks:
       - labtastic
   
   dns:
-    image: technitium/dns-server
+    image: ghcr.io/labtastic/dns-server
     restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
     healthcheck:
-      test: ["curl", "-f", "https://localhost:5380/api/"]
+      test: ["CMD", "curl", "-f", "http://localhost:5380/api/"]
       interval: 10s
       timeout: 10s
       retries: 5
       start_period: 10s
-    profiles:
-      - base
-      - base-setup
     networks:
       - labtastic
     environment:
@@ -104,6 +122,9 @@ services:
       DNS_SERVER_LOG_USING_LOCAL_TIME: "${BASE_DNS_SERVER_LOG_USING_LOCAL_TIME}"
     labels:
       - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=dns"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=dns"
       - "traefik.enable=true"
       - "traefik.http.routers.base-dns.rule=Host(`dns.${DOMAIN}`)"
       - "traefik.http.routers.base-dns.entrypoints=web, websecure"
@@ -114,9 +135,7 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     volumes:
-      - "$APP_DATA/base/dns:/etc/dns/config"
-
-
+      - "$APP_DATA/base/dns/:/etc/dns/config/"
 
 networks:
   labtastic:

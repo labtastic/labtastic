@@ -4,62 +4,41 @@ generate_compose_files_list() {
   files=""
 
   for app in ${ENABLED_APPS[@]}; do
-      files="-f apps/${ENABLED_APPS[$app]}/docker-compose.yml "
+      files="$files -f apps/$app/docker-compose.yml"
   done
 
   echo $files
 }
 
-generate_compose_profiles() {
-  source .env.apps
-
-  profiles=""
-
-  for app in ${!ENABLED_APPS[@]}; do
-    if [[ $app -eq 1 ]]; then
-      files="${ENABLED_APPS[$app]}"
-    else
-      files="${files},${ENABLED_APPS[$app]}"
-    fi
-  done
-
-  echo $profiles
-}
-
 docker_compose_setup() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" |  xargs ) docker compose --project-name labtastic --profile "$1-setup" ${compose_files} up -d
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" |  xargs ) docker compose --project-name labtastic --profile "$1-setup" -f apps/${1}/docker-compose.yml up -d
 }
 
 docker_compose_up() {
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml up -d
+}
+
+docker_compose_up_all() {
   compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} up -d
+  echo $compose_files
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic ${compose_files} up -d
 }
 
 docker_compose_down() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} down
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml down
 }
 
-docker_compose_stop_all() {
+docker_compose_down_all() {
   compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$app" ${compose_files} stop
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic ${compose_files} down
 }
 
 docker_compose_stop() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} stop
-}
-
-docker_compose_start_all() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$app" ${compose_files}l start
-  
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml stop
 }
 
 docker_compose_start() {
-  compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} start
+  env $(cat .env | grep -v "^#" | grep -v "ENABLED_APPS" | xargs ) docker compose --project-name labtastic -f apps/${1}/docker-compose.yml start
 }
 
 docker_compose_status() {
@@ -69,5 +48,5 @@ docker_compose_status() {
 
 docker_compose_logs() {
   compose_files=$(generate_compose_files_list)
-  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic --profile "$1" ${compose_files} logs -f "$2"
+  env $(cat .env | grep -v "^#" | xargs ) docker compose --project-name labtastic ${compose_files} logs -f "$1"
 }
