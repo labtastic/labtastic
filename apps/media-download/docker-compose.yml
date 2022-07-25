@@ -100,7 +100,7 @@ services:
         max-size: "100m"
     volumes:
       - "${APP_DATA}/media-download/sonarr/:/config/"
-      - "${MEDIA_DOWNLOAD_BASE_DIR}/${MEDIA_DOWNLOAD_TV_SHOWS_DIR_NAME}/:/movies"
+      - "${MEDIA_DOWNLOAD_BASE_DIR}/${MEDIA_DOWNLOAD_TV_SHOWS_DIR_NAME}/:/tv-shows"
       - "${MEDIA_DOWNLOAD_BASE_DIR}/anime/:/anime"
       - "${MEDIA_DOWNLOAD_BASE_DIR}/downloads/:/downloads"
     environment:
