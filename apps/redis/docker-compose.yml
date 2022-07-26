@@ -14,7 +14,7 @@ services:
       - "labtastic.dns.domain=${DOMAIN}"
       - "labtastic.dns.recordName=redis"
       - "traefik.enable=true"
-      - "traefik.tcp.routers.redis.rule=HostSNI(`redis.${DOMAIN}`)"
+      - "traefik.tcp.routers.redis.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.redis.entrypoints=redis"
       - "traefik.tcp.routers.redis.service=redis"
       - "traefik.tcp.routers.redis.tls=false"
