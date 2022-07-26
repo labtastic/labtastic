@@ -47,6 +47,11 @@ services:
   jackett:
     image: linuxserver/jackett
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9117/UI/Dashboard"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
     logging:
       driver: "json-file"
       options: 
