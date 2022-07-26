@@ -1,8 +1,13 @@
 apiVersion: 1
 
-providers: []
+providers:
 #  - name: 'Alerts'
 #    folder: 'Alerts'
 #    type: file
 #    options:
 #      path: /etc/grafana/provisioning/dashboards/alerts
+- name: 'Redis'
+  folder: 'Redis'
+  type: file
+  options:
+    path: /etc/grafana/provisioning/dashboards/redis

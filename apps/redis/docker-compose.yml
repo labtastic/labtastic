@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  redis:
+    image: redis
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=redis"
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.redis.rule=HostSNI(`redis.${DOMAIN}`)"
+      - "traefik.tcp.routers.redis.entrypoints=redis"
+      - "traefik.tcp.routers.redis.service=redis"
+      - "traefik.tcp.routers.redis.tls=false"
+      - "traefik.tcp.services.redis.loadbalancer.server.port=6379"
+    volumes:
+      - "redis-data:/data"
+    networks:
+      - labtastic
+  
+  redis-exporter:
+    image: oliver006/redis_exporter
+    restart: always
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    environment:
+      REDIS_ADDR: "redis://redis:6379"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "prometheus-job=redis"
+    networks:
+      - labtastic
+    depends_on:
+      redis:
+        condition: service_started
+
+volumes:
+  redis-data:
+
+networks:
+  labtastic:
+    external: true
