@@ -4,7 +4,7 @@ services:
   minio:
     image: minio/minio:${MINIO_RELEASE_TAG:-latest}
     restart: always
-    command: server --console-address ":9001" http://minio/data
+    command: server --console-address ":9001" /data
     logging:
       driver: "json-file"
       options: 
