@@ -18,8 +18,6 @@ services:
     environment:
       MINIO_ROOT_USER: "${MINIO_ROOT_USER:-minioadmin}"
       MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD:-minioadmin}"
-      MINIO_DOMAIN: "minio.${DOMAIN}"
-      MINIO_SERVER_URL: "https://minio.${DOMAIN}"
       MINIO_BROWSER_REDIRECT_URL: "https://minio-ui.${DOMAIN}"
       MINIO_PROMETHEUS_AUTH_TYPE: "public"
     labels:
