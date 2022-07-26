@@ -176,33 +176,33 @@ services:
     networks:
       - labtastic
     
-  alertmanager:
-    image: prom/alertmanager
-    restart: always
-    logging:
-      driver: "json-file"
-      options: 
-        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
-        max-size: "100m"
-    command:
-      - '--config.file=/etc/alertmanager/config.yml'
-      - '--storage.path=/alertmanager'
-    labels:
-      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
-      - "prometheus-job=alertmanager"
-      - "labtastic.dns.domain=${DOMAIN}"
-      - "labtastic.dns.recordName=alertmanager"
-      - "traefik.enable=true"
-      - "traefik.http.routers.monitoring-alertmanager.rule=Host(`alertmanager.${DOMAIN}`)"
-      - "traefik.http.routers.monitoring-alertmanager.entrypoints=web, websecure"
-      - "traefik.http.routers.monitoring-alertmanager.tls=true"
-      - "traefik.http.routers.monitoring-alertmanager.tls.certresolver=labtastic"
-      - "traefik.http.services.monitoring-alertmanager.loadbalancer.server.port=9093"
-    volumes:
-      - "$APP_DATA/monitoring/alertmanager/config/:/etc/alertmanager/"
-      - "$APP_DATA/monitoring/alertmanager/data/:/alertmanager/"
-    networks:
-      - labtastic
+  # alertmanager:
+  #   image: prom/alertmanager
+  #   restart: always
+  #   logging:
+  #     driver: "json-file"
+  #     options: 
+  #       tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+  #       max-size: "100m"
+  #   command:
+  #     - '--config.file=/etc/alertmanager/config.yml'
+  #     - '--storage.path=/alertmanager'
+  #   labels:
+  #     - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+  #     - "prometheus-job=alertmanager"
+  #     - "labtastic.dns.domain=${DOMAIN}"
+  #     - "labtastic.dns.recordName=alertmanager"
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.monitoring-alertmanager.rule=Host(`alertmanager.${DOMAIN}`)"
+  #     - "traefik.http.routers.monitoring-alertmanager.entrypoints=web, websecure"
+  #     - "traefik.http.routers.monitoring-alertmanager.tls=true"
+  #     - "traefik.http.routers.monitoring-alertmanager.tls.certresolver=labtastic"
+  #     - "traefik.http.services.monitoring-alertmanager.loadbalancer.server.port=9093"
+  #   volumes:
+  #     - "$APP_DATA/monitoring/alertmanager/config/:/etc/alertmanager/"
+  #     - "$APP_DATA/monitoring/alertmanager/data/:/alertmanager/"
+  #   networks:
+  #     - labtastic
   
   cadvisor:
     image: gcr.io/cadvisor/cadvisor

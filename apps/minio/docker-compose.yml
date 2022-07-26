@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  minio:
+    image: minio/minio:${MINIO_RELEASE_TAG:-latest}
+    restart: always
+    command: server --console-address ":9001" http://minio/data
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+        max-size: "100m"
+    environment:
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER:-minioadmin}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD:-minioadmin}"
+      MINIO_DOMAIN: "minio.${DOMAIN}"
+      MINIO_SERVER_URL: "https://minio.${DOMAIN}"
+      MINIO_BROWSER_REDIRECT_URL: "https://minio-ui.${DOMAIN}"
+      MINIO_PROMETHEUS_AUTH_TYPE: "public"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${AUTO_UPDATE}"
+      - "labtastic.dns.domain=${DOMAIN}"
+      - "labtastic.dns.recordName=minio,minio-ui"
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio-console.rule=Host(`minio-ui.${DOMAIN}`)"
+      - "traefik.http.routers.minio-console.entrypoints=websecure"
+      - "traefik.http.routers.minio-console.tls.certresolver=labtastic"
+      - "traefik.http.routers.minio-console.service=minio-console"
+      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio.rule=Host(`minio.${DOMAIN}`)"
+      - "traefik.http.routers.minio.entrypoints=websecure"
+      - "traefik.http.routers.minio.tls.certresolver=labtastic"
+      - "traefik.http.routers.minio.service=minio"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+    volumes:
+      - "${APP_DATA}/minio/data/:/data/"
+    networks:
+      - labtastic
+
+networks:
+  labtastic:
+    external: true
